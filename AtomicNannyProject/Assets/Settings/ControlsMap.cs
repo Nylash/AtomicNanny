@@ -33,6 +33,22 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""WeaponsWheel"",
+                    ""type"": ""Button"",
+                    ""id"": ""64204cae-73f5-4639-91b3-4e80ad6df4fd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""WeaponsSelection"",
+                    ""type"": ""Value"",
+                    ""id"": ""ae79f8c8-26a0-472b-9915-7543a398b048"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -123,6 +139,50 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac3585ed-407a-4ea5-af2a-dcb5364e1b50"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""WeaponsWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08836fbf-7e54-4720-b43f-29f6630c7415"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""WeaponsWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c23bcfd3-a994-443f-9c1c-237f1a67862c"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""WeaponsSelection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ace88b5c-daa3-4f39-8cae-0dd410b77052"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""WeaponsSelection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -144,6 +204,8 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
+        m_Gameplay_WeaponsWheel = m_Gameplay.FindAction("WeaponsWheel", throwIfNotFound: true);
+        m_Gameplay_WeaponsSelection = m_Gameplay.FindAction("WeaponsSelection", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -195,12 +257,16 @@ public class @ControlsMap : IInputActionCollection, IDisposable
     private IGameplayActions m_GameplayActionsCallbackInterface;
     private readonly InputAction m_Gameplay_Movement;
     private readonly InputAction m_Gameplay_Dash;
+    private readonly InputAction m_Gameplay_WeaponsWheel;
+    private readonly InputAction m_Gameplay_WeaponsSelection;
     public struct GameplayActions
     {
         private @ControlsMap m_Wrapper;
         public GameplayActions(@ControlsMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Gameplay_Movement;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
+        public InputAction @WeaponsWheel => m_Wrapper.m_Gameplay_WeaponsWheel;
+        public InputAction @WeaponsSelection => m_Wrapper.m_Gameplay_WeaponsSelection;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -216,6 +282,12 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
+                @WeaponsWheel.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsWheel;
+                @WeaponsWheel.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsWheel;
+                @WeaponsWheel.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsWheel;
+                @WeaponsSelection.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsSelection;
+                @WeaponsSelection.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsSelection;
+                @WeaponsSelection.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsSelection;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -226,6 +298,12 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @WeaponsWheel.started += instance.OnWeaponsWheel;
+                @WeaponsWheel.performed += instance.OnWeaponsWheel;
+                @WeaponsWheel.canceled += instance.OnWeaponsWheel;
+                @WeaponsSelection.started += instance.OnWeaponsSelection;
+                @WeaponsSelection.performed += instance.OnWeaponsSelection;
+                @WeaponsSelection.canceled += instance.OnWeaponsSelection;
             }
         }
     }
@@ -252,5 +330,7 @@ public class @ControlsMap : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnWeaponsWheel(InputAction.CallbackContext context);
+        void OnWeaponsSelection(InputAction.CallbackContext context);
     }
 }

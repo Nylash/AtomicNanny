@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovementManager : MonoBehaviour
 {
     public static PlayerMovementManager instance;
+
     #region CONFIGURATION
     [Header("CONFIGURATION")]
 #pragma warning disable 0649
@@ -24,8 +25,8 @@ public class PlayerMovementManager : MonoBehaviour
     #region VARIABLES
     [Header("VARIABLES")]
     public MovementState currentMovementState;
-    public Vector2 movementDirection;
-    public Vector2 dashDirection;
+    Vector2 movementDirection;
+    Vector2 dashDirection;
     #endregion
 
     private void OnEnable() => controlsMap.Gameplay.Enable();
@@ -55,38 +56,47 @@ public class PlayerMovementManager : MonoBehaviour
 
     void Movement()
     {
-        switch (currentMovementState)
+        if (!WeaponsWheelManager.instance.wheelOpen)
         {
-            case MovementState.moving:
-                controller.Move(new Vector3(movementDirection.x, 0, movementDirection.y) * normalSpeed * Time.deltaTime);
-                anim.SetFloat("InputX", movementDirection.x);
-                anim.SetFloat("InputY", movementDirection.y);
-                break;
-            case MovementState.firing:
-                break;
-            case MovementState.dashing:
-                controller.Move(new Vector3(dashDirection.x, 0, dashDirection.y) * dashSpeed * Time.deltaTime);
-                anim.SetFloat("InputX", dashDirection.x);
-                anim.SetFloat("InputY", dashDirection.y);
-                break;
-            default:
-                break;
+            switch (currentMovementState)
+            {
+                case MovementState.moving:
+                    controller.Move(new Vector3(movementDirection.x, 0, movementDirection.y) * normalSpeed * Time.deltaTime);
+                    anim.SetFloat("InputX", movementDirection.x);
+                    anim.SetFloat("InputY", movementDirection.y);
+                    break;
+                case MovementState.firing:
+                    break;
+                case MovementState.dashing:
+                    controller.Move(new Vector3(dashDirection.x, 0, dashDirection.y) * dashSpeed * Time.deltaTime);
+                    anim.SetFloat("InputX", dashDirection.x);
+                    anim.SetFloat("InputY", dashDirection.y);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     IEnumerator Dash()
     {
-        currentMovementState = MovementState.dashing;
-        if (movementDirection != Vector2.zero)
-            dashDirection = movementDirection;
-        yield return new WaitForSeconds(dashTime);
-        currentMovementState = MovementState.moving;
+        if (!WeaponsWheelManager.instance.wheelOpen)
+        {
+            currentMovementState = MovementState.dashing;
+            if (movementDirection != Vector2.zero)
+                dashDirection = movementDirection;
+            yield return new WaitForSeconds(dashTime);
+            currentMovementState = MovementState.moving;
+        }
     }
 
     void ReadMovementInput(InputAction.CallbackContext ctx)
     {
-        movementDirection = ctx.ReadValue<Vector2>();
-        dashDirection = ctx.ReadValue<Vector2>();
+        if (!WeaponsWheelManager.instance.wheelOpen)
+        {
+            movementDirection = ctx.ReadValue<Vector2>();
+            dashDirection = ctx.ReadValue<Vector2>();
+        }
     }
 
     public enum MovementState
