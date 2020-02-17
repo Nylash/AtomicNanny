@@ -61,3 +61,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+AtomicNannyProject/Library/
+
+AtomicNannyProject/obj/Debug/
+
+AtomicNannyProject/Temp/
