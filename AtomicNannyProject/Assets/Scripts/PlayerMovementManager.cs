@@ -8,10 +8,11 @@ public class PlayerMovementManager : MonoBehaviour
 
     #region CONFIGURATION
     [Header("CONFIGURATION")]
+    public float normalSpeed;
 #pragma warning disable 0649
-    [SerializeField] float normalSpeed;
     [SerializeField] float dashSpeed;
     [SerializeField] float dashTime;
+    [SerializeField] float dashCD;
 #pragma warning restore 0649
     #endregion
 
@@ -27,6 +28,7 @@ public class PlayerMovementManager : MonoBehaviour
     public MovementState currentMovementState;
     Vector2 movementDirection;
     Vector2 dashDirection;
+    bool dashReady;
     #endregion
 
     private void OnEnable() => controlsMap.Gameplay.Enable();
@@ -82,11 +84,17 @@ public class PlayerMovementManager : MonoBehaviour
     {
         if (!WeaponsWheelManager.instance.wheelOpen)
         {
-            currentMovementState = MovementState.dashing;
-            if (movementDirection != Vector2.zero)
-                dashDirection = movementDirection;
-            yield return new WaitForSeconds(dashTime);
-            currentMovementState = MovementState.moving;
+            if (dashReady)
+            {
+                dashReady = false;
+                currentMovementState = MovementState.dashing;
+                if (movementDirection != Vector2.zero)
+                    dashDirection = movementDirection;
+                yield return new WaitForSeconds(dashTime);
+                currentMovementState = MovementState.moving;
+                yield return new WaitForSeconds(dashCD - dashTime);
+                dashReady = true;
+            }
         }
     }
 

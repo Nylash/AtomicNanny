@@ -137,7 +137,7 @@ public class WeaponsWheelManager : MonoBehaviour
                 }
                 else if (angle >= 215 && angle < 270)
                 {
-                    print("railgun");
+                    print("raygun");
                     if (highlightedWeapon)
                     {
                         if (highlightedWeapon != railgun)

@@ -34,6 +34,30 @@
                     "type": "Value",
                     "id": "ae79f8c8-26a0-472b-9915-7543a398b048",
                     "expectedControlType": "Vector2",
+                    "processors": "NormalizeVector2",
+                    "interactions": ""
+                },
+                {
+                    "name": "AimDirection",
+                    "type": "Value",
+                    "id": "d28e69c8-0e41-4123-ba3e-29e03c22c872",
+                    "expectedControlType": "Vector2",
+                    "processors": "NormalizeVector2",
+                    "interactions": ""
+                },
+                {
+                    "name": "MousePos",
+                    "type": "Value",
+                    "id": "0ae940dc-265f-4377-acfa-2e1ed5c5685c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "67831410-f105-485d-a534-b6803c12bf92",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 }
@@ -162,12 +186,45 @@
                 },
                 {
                     "name": "",
-                    "id": "ace88b5c-daa3-4f39-8cae-0dd410b77052",
-                    "path": "<Mouse>/delta",
+                    "id": "b9cea776-403b-4d41-8df7-671cbd43de1e",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "NormalizeVector2",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AimDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f524f96-4806-46f9-a2c7-ad7208be4bc6",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "WeaponsSelection",
+                    "action": "MousePos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ecf8e29-b777-40a0-9ced-d193d80a1401",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f792005e-05aa-4d17-8f1f-363400c79fea",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

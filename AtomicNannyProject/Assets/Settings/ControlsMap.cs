@@ -47,6 +47,30 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""ae79f8c8-26a0-472b-9915-7543a398b048"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""AimDirection"",
+                    ""type"": ""Value"",
+                    ""id"": ""d28e69c8-0e41-4123-ba3e-29e03c22c872"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MousePos"",
+                    ""type"": ""Value"",
+                    ""id"": ""0ae940dc-265f-4377-acfa-2e1ed5c5685c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""67831410-f105-485d-a534-b6803c12bf92"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -175,12 +199,45 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ace88b5c-daa3-4f39-8cae-0dd410b77052"",
-                    ""path"": ""<Mouse>/delta"",
+                    ""id"": ""b9cea776-403b-4d41-8df7-671cbd43de1e"",
+                    ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AimDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f524f96-4806-46f9-a2c7-ad7208be4bc6"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""WeaponsSelection"",
+                    ""action"": ""MousePos"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ecf8e29-b777-40a0-9ced-d193d80a1401"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f792005e-05aa-4d17-8f1f-363400c79fea"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -206,6 +263,9 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
         m_Gameplay_WeaponsWheel = m_Gameplay.FindAction("WeaponsWheel", throwIfNotFound: true);
         m_Gameplay_WeaponsSelection = m_Gameplay.FindAction("WeaponsSelection", throwIfNotFound: true);
+        m_Gameplay_AimDirection = m_Gameplay.FindAction("AimDirection", throwIfNotFound: true);
+        m_Gameplay_MousePos = m_Gameplay.FindAction("MousePos", throwIfNotFound: true);
+        m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -259,6 +319,9 @@ public class @ControlsMap : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Dash;
     private readonly InputAction m_Gameplay_WeaponsWheel;
     private readonly InputAction m_Gameplay_WeaponsSelection;
+    private readonly InputAction m_Gameplay_AimDirection;
+    private readonly InputAction m_Gameplay_MousePos;
+    private readonly InputAction m_Gameplay_Shoot;
     public struct GameplayActions
     {
         private @ControlsMap m_Wrapper;
@@ -267,6 +330,9 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
         public InputAction @WeaponsWheel => m_Wrapper.m_Gameplay_WeaponsWheel;
         public InputAction @WeaponsSelection => m_Wrapper.m_Gameplay_WeaponsSelection;
+        public InputAction @AimDirection => m_Wrapper.m_Gameplay_AimDirection;
+        public InputAction @MousePos => m_Wrapper.m_Gameplay_MousePos;
+        public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -288,6 +354,15 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 @WeaponsSelection.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsSelection;
                 @WeaponsSelection.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsSelection;
                 @WeaponsSelection.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponsSelection;
+                @AimDirection.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAimDirection;
+                @AimDirection.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAimDirection;
+                @AimDirection.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAimDirection;
+                @MousePos.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMousePos;
+                @MousePos.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMousePos;
+                @MousePos.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMousePos;
+                @Shoot.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -304,6 +379,15 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 @WeaponsSelection.started += instance.OnWeaponsSelection;
                 @WeaponsSelection.performed += instance.OnWeaponsSelection;
                 @WeaponsSelection.canceled += instance.OnWeaponsSelection;
+                @AimDirection.started += instance.OnAimDirection;
+                @AimDirection.performed += instance.OnAimDirection;
+                @AimDirection.canceled += instance.OnAimDirection;
+                @MousePos.started += instance.OnMousePos;
+                @MousePos.performed += instance.OnMousePos;
+                @MousePos.canceled += instance.OnMousePos;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
             }
         }
     }
@@ -332,5 +416,8 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnWeaponsWheel(InputAction.CallbackContext context);
         void OnWeaponsSelection(InputAction.CallbackContext context);
+        void OnAimDirection(InputAction.CallbackContext context);
+        void OnMousePos(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
     }
 }

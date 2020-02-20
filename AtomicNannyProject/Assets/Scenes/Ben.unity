@@ -282,8 +282,10 @@ GameObject:
   - component: {fileID: 280023494}
   - component: {fileID: 280023493}
   - component: {fileID: 280023501}
+  - component: {fileID: 280023502}
   - component: {fileID: 280023499}
-  m_Layer: 0
+  - component: {fileID: 280023500}
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,6 +307,7 @@ MonoBehaviour:
   normalSpeed: 5
   dashSpeed: 20
   dashTime: 0.3
+  dashCD: 0
   currentMovementState: 0
 --- !u!143 &280023494
 CharacterController:
@@ -419,6 +422,37 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &280023500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280023492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: a3022d50e70b2524ab43270b9d6130f4,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!114 &280023501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +465,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6956d86688f30dc48acefe773baa58b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentWeapon: 0
+  usingGamepad: 1
+  aimGuide: {fileID: 888488068}
+  currentWeapon: 2
+  aimDirection: {x: 0, y: 0}
+  mousePosition: {x: 0, y: 0}
+--- !u!114 &280023502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280023492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ec642a3b66c6ad43ab7103b8f4f4446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pistol:
+    weapon: 0
+    timeBeforeFirstShoot: 0
+    fireRate: 1
+    damage: 5
+    splashDamage: 0
+    inaccuracyAngle: 2
+    ammunitionsConso: 1
+    recoilSpeed: 0
+    projectileByShoot: 1
+    range: 20
+    projectileSpeed: 20
+    projectileSize: 1
+    projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
+      type: 3}
+  shotgun:
+    weapon: 1
+    timeBeforeFirstShoot: 0
+    fireRate: 3
+    damage: 5
+    splashDamage: 0
+    inaccuracyAngle: 15
+    ammunitionsConso: 4
+    recoilSpeed: 0
+    projectileByShoot: 4
+    range: 10
+    projectileSpeed: 20
+    projectileSize: 1
+    projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
+      type: 3}
+  minigun:
+    weapon: 2
+    timeBeforeFirstShoot: 2
+    fireRate: 0.05
+    damage: 2
+    splashDamage: 0
+    inaccuracyAngle: 6
+    ammunitionsConso: 1
+    recoilSpeed: 2.5
+    projectileByShoot: 1
+    range: 20
+    projectileSpeed: 30
+    projectileSize: 1
+    projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
+      type: 3}
+  raygun:
+    weapon: 0
+    timeBeforeFirstShoot: 0
+    fireRate: 0
+    damage: 0
+    splashDamage: 0
+    inaccuracyAngle: 0
+    ammunitionsConso: 0
+    recoilSpeed: 0
+    projectileByShoot: 0
+    range: 0
+    projectileSpeed: 0
+    projectileSize: 0
+    projectile: {fileID: 0}
+  plasmaRifle:
+    weapon: 0
+    timeBeforeFirstShoot: 0
+    fireRate: 0
+    damage: 0
+    splashDamage: 0
+    inaccuracyAngle: 0
+    ammunitionsConso: 0
+    recoilSpeed: 0
+    projectileByShoot: 0
+    range: 0
+    projectileSpeed: 0
+    projectileSize: 0
+    projectile: {fileID: 0}
+  rocket:
+    weapon: 0
+    timeBeforeFirstShoot: 0
+    fireRate: 0
+    damage: 0
+    splashDamage: 0
+    inaccuracyAngle: 0
+    ammunitionsConso: 0
+    recoilSpeed: 0
+    projectileByShoot: 0
+    range: 0
+    projectileSpeed: 0
+    projectileSize: 0
+    projectile: {fileID: 0}
+  flameThrower:
+    weapon: 0
+    timeBeforeFirstShoot: 0
+    fireRate: 0
+    damage: 0
+    splashDamage: 0
+    inaccuracyAngle: 0
+    ammunitionsConso: 0
+    recoilSpeed: 0
+    projectileByShoot: 0
+    range: 0
+    projectileSpeed: 0
+    projectileSize: 0
+    projectile: {fileID: 0}
 --- !u!1 &603531112
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,8 +668,8 @@ GameObject:
   - component: {fileID: 634487276}
   - component: {fileID: 634487275}
   - component: {fileID: 634487274}
-  m_Layer: 0
-  m_Name: Cube
+  m_Layer: 8
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -857,6 +1008,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &888488065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 888488068}
+  - component: {fileID: 888488067}
+  - component: {fileID: 888488066}
+  m_Layer: 0
+  m_Name: AimGuide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &888488066
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888488065}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &888488067
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888488065}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &888488068
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888488065}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &903556969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,7 +1747,7 @@ GameObject:
   - component: {fileID: 1780462894}
   - component: {fileID: 1780462893}
   m_Layer: 5
-  m_Name: railgun
+  m_Name: raygun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1560,7 +1790,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fbfdf218bbc016d419e1edbe644cda7a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 57aa1febc5f8d414ea0c70bc723bc78a, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
