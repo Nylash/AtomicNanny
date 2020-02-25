@@ -15,6 +15,7 @@ public class WeaponsWheelManager : MonoBehaviour
     [SerializeField] Image raygun;
     [SerializeField] Image rocket;
     [SerializeField] Image flameThrower;
+    [SerializeField] Image arrow;
 #pragma warning restore 0649
     #endregion
 
@@ -73,7 +74,12 @@ public class WeaponsWheelManager : MonoBehaviour
             }
             if (inputDirection != Vector2.zero)
             {
+                if (!arrow.enabled)
+                    arrow.enabled = true;
+
                 float angle = Vector2.SignedAngle(new Vector2(1, 0), inputDirection);
+                arrow.transform.eulerAngles= new Vector3(0, 0, angle - 90 );
+
                 if (angle < 0)
                     angle = 360 + angle;
 
@@ -105,6 +111,11 @@ public class WeaponsWheelManager : MonoBehaviour
                 {
                     HighlightWeapon(minigun);
                 }
+            }
+            else
+            {
+                if (arrow.enabled)
+                    arrow.enabled = false;
             }
         }
     }
