@@ -200,7 +200,7 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b9cea776-403b-4d41-8df7-671cbd43de1e"",
-                    ""path"": ""<Gamepad>/rightStick"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",

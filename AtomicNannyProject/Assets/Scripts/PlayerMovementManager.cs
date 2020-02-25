@@ -28,7 +28,8 @@ public class PlayerMovementManager : MonoBehaviour
     public MovementState currentMovementState;
     Vector2 movementDirection;
     Vector2 dashDirection;
-    bool dashReady;
+    Vector2 aimDirection;
+    bool dashReady = true;
     #endregion
 
     private void OnEnable() => controlsMap.Gameplay.Enable();
@@ -46,6 +47,7 @@ public class PlayerMovementManager : MonoBehaviour
         controlsMap.Gameplay.Movement.performed += ctx => ReadMovementInput(ctx);
         controlsMap.Gameplay.Movement.canceled += ctx => movementDirection = Vector2.zero;
         controlsMap.Gameplay.Dash.started += ctx => StartCoroutine(Dash());
+        controlsMap.Gameplay.AimDirection.performed += ctx => aimDirection = ctx.ReadValue<Vector2>();
 
         anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
@@ -68,6 +70,16 @@ public class PlayerMovementManager : MonoBehaviour
                     anim.SetFloat("InputY", movementDirection.y);
                     break;
                 case MovementState.firing:
+                    if (WeaponsManager.instance.usingGamepad)
+                    {
+                        anim.SetFloat("InputX", aimDirection.x);
+                        anim.SetFloat("InputY", aimDirection.y);
+                    }
+                    else
+                    {
+                        anim.SetFloat("InputX", WeaponsManager.instance.aimDirectionMouse.x);
+                        anim.SetFloat("InputY", WeaponsManager.instance.aimDirectionMouse.z);
+                    }
                     break;
                 case MovementState.dashing:
                     controller.Move(new Vector3(dashDirection.x, 0, dashDirection.y) * dashSpeed * Time.deltaTime);

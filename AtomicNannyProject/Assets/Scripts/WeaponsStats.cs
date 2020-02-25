@@ -85,7 +85,17 @@ public class WeaponsStats : MonoBehaviour
         return GetWeapon(weapon.ToString()).projectile;
     }
 
-    Weapon GetWeapon(string name)
+    public bool IsReloading(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).reloading;
+    }
+
+    public void StartReloadSystem(WeaponsManager.Weapons weapon)
+    {
+        StartCoroutine(GetWeapon(weapon.ToString()).ReloadSystem());
+    }
+
+    public Weapon GetWeapon(string name)
     {
         switch (name)
         {

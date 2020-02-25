@@ -307,7 +307,7 @@ MonoBehaviour:
   normalSpeed: 5
   dashSpeed: 20
   dashTime: 0.3
-  dashCD: 0
+  dashCD: 5
   currentMovementState: 0
 --- !u!143 &280023494
 CharacterController:
@@ -465,11 +465,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6956d86688f30dc48acefe773baa58b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingGamepad: 1
+  usingGamepad: 0
   aimGuide: {fileID: 888488068}
-  currentWeapon: 2
-  aimDirection: {x: 0, y: 0}
-  mousePosition: {x: 0, y: 0}
+  currentWeapon: 1
+  aimDirectionMouse: {x: 0, y: 0, z: 0}
+  startShootNeeded: 0
 --- !u!114 &280023502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +497,7 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    reloading: 0
   shotgun:
     weapon: 1
     timeBeforeFirstShoot: 0
@@ -512,6 +513,7 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    reloading: 0
   minigun:
     weapon: 2
     timeBeforeFirstShoot: 2
@@ -527,8 +529,9 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    reloading: 0
   raygun:
-    weapon: 0
+    weapon: 3
     timeBeforeFirstShoot: 0
     fireRate: 0
     damage: 0
@@ -541,8 +544,9 @@ MonoBehaviour:
     projectileSpeed: 0
     projectileSize: 0
     projectile: {fileID: 0}
+    reloading: 0
   plasmaRifle:
-    weapon: 0
+    weapon: 4
     timeBeforeFirstShoot: 0
     fireRate: 0
     damage: 0
@@ -555,8 +559,9 @@ MonoBehaviour:
     projectileSpeed: 0
     projectileSize: 0
     projectile: {fileID: 0}
+    reloading: 0
   rocket:
-    weapon: 0
+    weapon: 5
     timeBeforeFirstShoot: 0
     fireRate: 0
     damage: 0
@@ -569,8 +574,9 @@ MonoBehaviour:
     projectileSpeed: 0
     projectileSize: 0
     projectile: {fileID: 0}
+    reloading: 0
   flameThrower:
-    weapon: 0
+    weapon: 6
     timeBeforeFirstShoot: 0
     fireRate: 0
     damage: 0
@@ -583,6 +589,7 @@ MonoBehaviour:
     projectileSpeed: 0
     projectileSize: 0
     projectile: {fileID: 0}
+    reloading: 0
 --- !u!1 &603531112
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,7 +856,7 @@ MonoBehaviour:
   shotgun: {fileID: 603531114}
   minigun: {fileID: 88741831}
   plasmaRifle: {fileID: 1010639894}
-  railgun: {fileID: 1780462893}
+  raygun: {fileID: 1780462893}
   rocket: {fileID: 2077349340}
   flameThrower: {fileID: 94266407}
   wheelOpen: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Weapon
 {
+    [Header("CONFIGURATION")]
     public WeaponsManager.Weapons weapon;
     public float timeBeforeFirstShoot;
     public float fireRate;
@@ -19,4 +20,18 @@ public class Weapon
     public float projectileSpeed;
     public float projectileSize;
     public GameObject projectile;
+    [Header("RUNNING VARIABLES")]
+    public bool reloading;
+
+    public IEnumerator ReloadSystem()
+    {
+        reloading = true;
+        yield return new WaitForSeconds(Mathf.Abs(WeaponsStats.instance.GetFireRate(weapon) - WeaponsStats.instance.GetTimeBeforeFirstShoot(weapon)));
+        reloading = false;
+        if (WeaponsManager.instance.startShootNeeded)
+        {
+            WeaponsManager.instance.startShootNeeded = false;
+            WeaponsManager.instance.StartCoroutine("Shoot");
+        }
+    }
 }

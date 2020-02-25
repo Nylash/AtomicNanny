@@ -12,7 +12,7 @@ public class WeaponsWheelManager : MonoBehaviour
     [SerializeField] Image shotgun;
     [SerializeField] Image minigun;
     [SerializeField] Image plasmaRifle;
-    [SerializeField] Image railgun;
+    [SerializeField] Image raygun;
     [SerializeField] Image rocket;
     [SerializeField] Image flameThrower;
 #pragma warning restore 0649
@@ -27,7 +27,9 @@ public class WeaponsWheelManager : MonoBehaviour
     #region VARIABLES
     [Header("VARIABLES")]
     public bool wheelOpen;
-    Vector2 weaponsSelectionInput;
+    Vector3 mouseDirection;
+    Vector2 inputDirection;
+    Vector2 mousePosition;
     public Image highlightedWeapon;
     Color halfOpacity = new Color(1, 1, 1, .5f);
     #endregion
@@ -46,8 +48,9 @@ public class WeaponsWheelManager : MonoBehaviour
 
         controlsMap.Gameplay.WeaponsWheel.started += ctx => OpenWheel();
         controlsMap.Gameplay.WeaponsWheel.canceled += ctx => CloseWheel();
-        controlsMap.Gameplay.WeaponsSelection.performed += ctx => weaponsSelectionInput = ctx.ReadValue<Vector2>();
-        controlsMap.Gameplay.WeaponsSelection.canceled += ctx => weaponsSelectionInput = Vector2.zero;
+        controlsMap.Gameplay.WeaponsSelection.performed += ctx => inputDirection = ctx.ReadValue<Vector2>();
+        controlsMap.Gameplay.WeaponsSelection.canceled += ctx => StopPadInput();
+        controlsMap.Gameplay.MousePos.performed += ctx => mousePosition = ctx.ReadValue<Vector2>();
 
         weaponsWheel = GetComponent<Canvas>();
     }
@@ -56,140 +59,71 @@ public class WeaponsWheelManager : MonoBehaviour
     {
         if (wheelOpen)
         {
-            if (weaponsSelectionInput != Vector2.zero)
+            if (!WeaponsManager.instance.usingGamepad) {
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                Plane plane = new Plane(Vector3.up, Vector3.zero);
+                float distance;
+                if (plane.Raycast(ray, out distance))
+                {
+                    Vector3 target = ray.GetPoint(distance);
+                    mouseDirection = target - WeaponsManager.instance.transform.position;
+                    mouseDirection.Normalize();
+                    inputDirection = new Vector2(mouseDirection.x, mouseDirection.z);
+                }
+            }
+            if (inputDirection != Vector2.zero)
             {
-                float angle = Vector2.SignedAngle(new Vector2(1, 0), weaponsSelectionInput);
+                float angle = Vector2.SignedAngle(new Vector2(1, 0), inputDirection);
                 if (angle < 0)
                     angle = 360 + angle;
 
                 if (angle >= 20 && angle < 75)
                 {
-                    print("shotgun");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != shotgun)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            shotgun.color = Color.white;
-                            highlightedWeapon = shotgun;
-                        }
-                    }
-                    else
-                    {
-                        shotgun.color = Color.white;
-                        highlightedWeapon = shotgun;
-                    }
-
+                    HighlightWeapon(shotgun);
                 }
                 else if (angle >= 75 && angle < 105)
                 {
-                    print("pistol");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != pistol)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            pistol.color = Color.white;
-                            highlightedWeapon = pistol;
-                        }
-                    }
-                    else
-                    {
-                        pistol.color = Color.white;
-                        highlightedWeapon = pistol;
-                    }
+                    HighlightWeapon(pistol);
                 }
                 else if (angle >= 105 && angle < 160)
                 {
-                    print("flameThrower");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != flameThrower)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            flameThrower.color = Color.white;
-                            highlightedWeapon = flameThrower;
-                        }
-                    }
-                    else
-                    {
-                        flameThrower.color = Color.white;
-                        highlightedWeapon = flameThrower;
-                    }
+                    HighlightWeapon(flameThrower);
                 }
                 else if (angle >= 160 && angle < 215)
                 {
-                    print("rocket");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != rocket)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            rocket.color = Color.white;
-                            highlightedWeapon = rocket;
-                        }
-                    }
-                    else
-                    {
-                        rocket.color = Color.white;
-                        highlightedWeapon = rocket;
-                    }
+                    HighlightWeapon(rocket);
                 }
                 else if (angle >= 215 && angle < 270)
                 {
-                    print("raygun");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != railgun)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            railgun.color = Color.white;
-                            highlightedWeapon = railgun;
-                        }
-                    }
-                    else
-                    {
-                        railgun.color = Color.white;
-                        highlightedWeapon = railgun;
-                    }
+                    HighlightWeapon(raygun);
                 }
                 else if (angle >= 270 && angle < 325)
                 {
-                    print("plasmaRifle");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != plasmaRifle)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            plasmaRifle.color = Color.white;
-                            highlightedWeapon = plasmaRifle;
-                        }
-                    }
-                    else
-                    {
-                        plasmaRifle.color = Color.white;
-                        highlightedWeapon = plasmaRifle;
-                    }
+                    HighlightWeapon(plasmaRifle);
                 }
                 else if (angle >= 325 || angle < 20)
                 {
-                    print("minigun");
-                    if (highlightedWeapon)
-                    {
-                        if (highlightedWeapon != minigun)
-                        {
-                            highlightedWeapon.color = halfOpacity;
-                            minigun.color = Color.white;
-                            highlightedWeapon = minigun;
-                        }
-                    }
-                    else
-                    {
-                        minigun.color = Color.white;
-                        highlightedWeapon = minigun;
-                    }
+                    HighlightWeapon(minigun);
                 }
             }
+        }
+    }
+
+    void HighlightWeapon(Image weapon)
+    {
+        if (highlightedWeapon)
+        {
+            if (highlightedWeapon != weapon)
+            {
+                highlightedWeapon.color = halfOpacity;
+                weapon.color = Color.white;
+                highlightedWeapon = weapon;
+            }
+        }
+        else
+        {
+            weapon.color = Color.white;
+            highlightedWeapon = weapon;
         }
     }
 
@@ -205,8 +139,19 @@ public class WeaponsWheelManager : MonoBehaviour
         weaponsWheel.enabled = false;
         if (highlightedWeapon)
         {
+            WeaponsManager.instance.ChangeWeapon(WeaponsStats.instance.GetWeapon(highlightedWeapon.name).weapon);
             highlightedWeapon.color = halfOpacity;
             highlightedWeapon = null;
         }    
+    }
+
+    void StopPadInput()
+    {
+        inputDirection = Vector2.zero;
+        if (highlightedWeapon)
+        {
+            highlightedWeapon.color = halfOpacity;
+            highlightedWeapon = null;
+        }
     }
 }
