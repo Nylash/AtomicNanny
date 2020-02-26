@@ -86,12 +86,10 @@ public class WeaponsManager : MonoBehaviour
 
     void StopShooting()
     {
-        if (!WeaponsWheelManager.instance.wheelOpen)
-        {
-            StopCoroutine("Shoot");
-            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-            startShootNeeded = false;
-        }
+        StopCoroutine("Shoot");
+        PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+        startShootNeeded = false;
+        PlayerMovementManager.instance.recoil = Vector3.zero;
     }
 
     IEnumerator Shoot()
@@ -154,12 +152,14 @@ public class WeaponsManager : MonoBehaviour
                 float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
                 Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirection.x, 0, aimDirection.y) * Vector3.Distance(transform.position, new Vector3(aimDirection.x, 0, aimDirection.y));
                 bulletScriptRef.direction = shootDirection.normalized;
+                StartCoroutine(Recoil(shootDirection.normalized));
             }
             else
             {
                 float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
                 Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z) * Vector3.Distance(transform.position, new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z));
                 bulletScriptRef.direction = shootDirection.normalized;
+                StartCoroutine(Recoil(shootDirection.normalized));
             }
             bulletScriptRef.speed = WeaponsStats.instance.GetProjectileSpeed(currentWeapon);
             bulletScriptRef.range = WeaponsStats.instance.GetRange(currentWeapon);
@@ -167,6 +167,15 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.isFlame = true;
             bulletRef.SetActive(true);
         }
+    }
+
+    IEnumerator Recoil(Vector3 shootDirection)
+    {
+        PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon);
+        yield return new WaitForSeconds(.1f);
+        PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon)/2;
+        yield return new WaitForSeconds(.2f);
+        PlayerMovementManager.instance.recoil = Vector3.zero;
     }
 
     void CreateRay()

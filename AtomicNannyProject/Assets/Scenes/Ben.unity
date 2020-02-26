@@ -309,6 +309,7 @@ MonoBehaviour:
   dashTime: 0.3
   dashCD: 5
   currentMovementState: 0
+  recoil: {x: 0, y: 0, z: 0}
 --- !u!143 &280023494
 CharacterController:
   m_ObjectHideFlags: 0
@@ -470,7 +471,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   aimGuide: {fileID: 888488068}
-  currentWeapon: 6
+  currentWeapon: 2
   aimDirectionMouse: {x: 0, y: 0, z: 0}
   startShootNeeded: 0
 --- !u!114 &280023502
@@ -493,7 +494,7 @@ MonoBehaviour:
     splashDamage: 0
     inaccuracyAngle: 2
     ammunitionsConso: 1
-    recoilSpeed: 0
+    recoilSpeed: 1
     projectileByShoot: 1
     range: 20
     projectileSpeed: 20
@@ -509,7 +510,7 @@ MonoBehaviour:
     splashDamage: 0
     inaccuracyAngle: 15
     ammunitionsConso: 4
-    recoilSpeed: 0
+    recoilSpeed: 5
     projectileByShoot: 4
     range: 10
     projectileSpeed: 20
@@ -573,7 +574,7 @@ MonoBehaviour:
     splashDamage: 20
     inaccuracyAngle: 5
     ammunitionsConso: 0
-    recoilSpeed: 0
+    recoilSpeed: 3
     projectileByShoot: 1
     range: 20
     projectileSpeed: 10

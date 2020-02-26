@@ -26,6 +26,7 @@ public class PlayerMovementManager : MonoBehaviour
     #region VARIABLES
     [Header("VARIABLES")]
     public MovementState currentMovementState;
+    public Vector3 recoil;
     Vector2 movementDirection;
     Vector2 dashDirection;
     Vector2 aimDirection;
@@ -70,6 +71,7 @@ public class PlayerMovementManager : MonoBehaviour
                     anim.SetFloat("InputY", movementDirection.y);
                     break;
                 case MovementState.firing:
+                    controller.Move(recoil * Time.deltaTime);
                     if (WeaponsManager.instance.usingGamepad)
                     {
                         anim.SetFloat("InputX", aimDirection.x);
@@ -117,6 +119,11 @@ public class PlayerMovementManager : MonoBehaviour
             movementDirection = ctx.ReadValue<Vector2>();
             dashDirection = ctx.ReadValue<Vector2>();
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        print("zoulou");
     }
 
     public enum MovementState
