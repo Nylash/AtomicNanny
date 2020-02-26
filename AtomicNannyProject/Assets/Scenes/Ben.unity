@@ -470,7 +470,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   aimGuide: {fileID: 888488068}
-  currentWeapon: 3
+  currentWeapon: 6
   aimDirectionMouse: {x: 0, y: 0, z: 0}
   startShootNeeded: 0
 --- !u!114 &280023502
@@ -584,17 +584,18 @@ MonoBehaviour:
   flameThrower:
     weapon: 6
     timeBeforeFirstShoot: 0
-    fireRate: 0
-    damage: 0
+    fireRate: 0.01
+    damage: 1
     splashDamage: 0
-    inaccuracyAngle: 0
+    inaccuracyAngle: 30
     ammunitionsConso: 0
     recoilSpeed: 0
-    projectileByShoot: 0
-    range: 0
-    projectileSpeed: 0
-    projectileSize: 0
-    projectile: {fileID: 0}
+    projectileByShoot: 5
+    range: 3
+    projectileSpeed: 2.5
+    projectileSize: 1
+    projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
+      type: 3}
     reloading: 0
 --- !u!1 &603531112
 GameObject:

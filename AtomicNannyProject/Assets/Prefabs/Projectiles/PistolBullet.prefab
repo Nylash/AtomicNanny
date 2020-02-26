@@ -94,9 +94,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0175f44652c3fb94a84374cdba1bd4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flameSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.25000006
+      outSlope: -0.25000006
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.95
+      inSlope: -0.71875
+      outSlope: -0.71875
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.1875
+      outSlope: -1.1875
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   direction: {x: 0, y: 0, z: 0}
   speed: 0
   range: 0
+  isFlame: 0
 --- !u!54 &8311080973526007926
 Rigidbody:
   m_ObjectHideFlags: 0

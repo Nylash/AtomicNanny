@@ -28,8 +28,6 @@ public class WeaponsManager : MonoBehaviour
     public bool startShootNeeded;
     Vector2 aimDirection;
     Vector2 mousePosition;
-    
-    
     #endregion
 
     private void OnEnable() => controlsMap.Gameplay.Enable();
@@ -126,7 +124,6 @@ public class WeaponsManager : MonoBehaviour
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
                     CreateRay();
                 }
-            //case Weapons.flameThrower:
             default:
                 if (WeaponsStats.instance.IsReloading(currentWeapon))
                 {
@@ -166,6 +163,8 @@ public class WeaponsManager : MonoBehaviour
             }
             bulletScriptRef.speed = WeaponsStats.instance.GetProjectileSpeed(currentWeapon);
             bulletScriptRef.range = WeaponsStats.instance.GetRange(currentWeapon);
+            if (currentWeapon == Weapons.flameThrower)
+                bulletScriptRef.isFlame = true;
             bulletRef.SetActive(true);
         }
     }
@@ -225,13 +224,6 @@ public class WeaponsManager : MonoBehaviour
             if (PlayerMovementManager.instance.currentMovementState == PlayerMovementManager.MovementState.firing)
                 PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        if(WeaponsStats.instance)
-            Gizmos.DrawWireSphere(transform.position, WeaponsStats.instance.GetRange(currentWeapon));
     }
 
     public enum Weapons
