@@ -25,7 +25,10 @@ public class WeaponsManager : MonoBehaviour
     [Header("VARIABLES")]
     public Weapons currentWeapon;
     public Vector3 aimDirectionMouse;
-    public bool startShootNeeded;
+    public Coroutine shotCoroutine;
+    public Coroutine secondaryShotCoroutine;
+    public bool startShotNeeded;
+    public bool startSecondaryShotNeeded;
     Vector2 aimDirection;
     Vector2 mousePosition;
     #endregion
@@ -44,10 +47,17 @@ public class WeaponsManager : MonoBehaviour
 
         controlsMap.Gameplay.AimDirection.performed += ctx => aimDirection = ctx.ReadValue<Vector2>();
         controlsMap.Gameplay.MousePos.performed += ctx => mousePosition = ctx.ReadValue<Vector2>();
-        controlsMap.Gameplay.Shoot.started += ctx => StartShooting(false);
-        controlsMap.Gameplay.Shoot.canceled += ctx => StopShooting();
+        controlsMap.Gameplay.Shot.started += ctx => StartShooting(false);
+        controlsMap.Gameplay.Shot.canceled += ctx => StopShooting();
+        controlsMap.Gameplay.SecondaryShot.started += ctx => StartSecondaryShot(false);
+        controlsMap.Gameplay.SecondaryShot.canceled += ctx => StopSecondaryShot();
 
         aimDirection = transform.right;
+    }
+
+    private void Start()
+    {
+        WeaponsStats.instance.InstantiateMod(currentWeapon);
     }
 
     private void Update()
@@ -78,41 +88,78 @@ public class WeaponsManager : MonoBehaviour
     {
         if (!WeaponsWheelManager.instance.wheelOpen)
         {
-            StartCoroutine("Shoot");
-            if (!externalCall)
-                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+            if (WeaponsStats.instance.IsStanced(currentWeapon))
+            {
+                if (secondaryShotCoroutine != null)
+                    StopCoroutine(secondaryShotCoroutine);
+                shotCoroutine = StartCoroutine(SecondaryShot(true));
+                if (!externalCall)
+                    PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+            }
+            else
+            {
+                shotCoroutine = StartCoroutine(Shoot());
+                if (secondaryShotCoroutine != null)
+                    StopCoroutine(secondaryShotCoroutine);
+                startSecondaryShotNeeded = false;
+                if (!externalCall)
+                    PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+            }
         }
     }
 
     void StopShooting()
     {
-        StopCoroutine("Shoot");
+        if(shotCoroutine != null)
+            StopCoroutine(shotCoroutine);
         PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-        startShootNeeded = false;
+        startShotNeeded = false;
         PlayerMovementManager.instance.recoil = Vector3.zero;
     }
 
-    IEnumerator Shoot()
+    public void StartSecondaryShot(bool externalCall)
+    {
+        if (!WeaponsWheelManager.instance.wheelOpen)
+        {
+            secondaryShotCoroutine = StartCoroutine(SecondaryShot());
+            if(shotCoroutine != null)
+                StopCoroutine(shotCoroutine);
+            startShotNeeded = false;
+            if (!externalCall)
+                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+        }
+    }
+
+    void StopSecondaryShot()
+    {
+        if(secondaryShotCoroutine != null)
+            StopCoroutine(secondaryShotCoroutine);
+        PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+        startSecondaryShotNeeded = false;
+        PlayerMovementManager.instance.recoil = Vector3.zero;
+    }
+
+    public IEnumerator Shoot()
     {
         switch (currentWeapon)
         {
             case Weapons.minigun:
                 float time = WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon);
                 yield return new WaitForSeconds(time / 2);
-                CreateBullet();
+                CreateBullet(false);
                 yield return new WaitForSeconds(time / 3);
-                CreateBullet();
+                CreateBullet(false);
                 yield return new WaitForSeconds(time / 6);
-                CreateBullet();
+                CreateBullet(false);
                 while (true)
                 {
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
-                    CreateBullet();
+                    CreateBullet(false);
                 }
             case Weapons.raygun:
                 if (WeaponsStats.instance.IsReloading(currentWeapon))
                 {
-                    startShootNeeded = true;
+                    startShotNeeded = true;
                     yield break;
                 }
                 yield return new WaitForSeconds(WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
@@ -125,47 +172,99 @@ public class WeaponsManager : MonoBehaviour
             default:
                 if (WeaponsStats.instance.IsReloading(currentWeapon))
                 {
-                    startShootNeeded = true;
+                    startShotNeeded = true;
                     yield break;
                 }
                 yield return new WaitForSeconds(WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
-                CreateBullet();
+                CreateBullet(false);
                 while (true)
                 {
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
-                    CreateBullet();
+                    CreateBullet(false);
                 }
         }
     }
 
-    void CreateBullet()
+    public IEnumerator SecondaryShot(bool calledFromPrimary = false)
     {
-        WeaponsStats.instance.StartReloadSystem(currentWeapon);
-        for (int i = 0; i < WeaponsStats.instance.GetProjectileByShoot(currentWeapon); i++)
+        if (WeaponsStats.instance.GetEquippedMod(currentWeapon))
         {
-            GameObject bulletRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
-            bulletRef.transform.localScale *= WeaponsStats.instance.GetProjectileSize(currentWeapon);
-            Projectile bulletScriptRef = bulletRef.GetComponent<Projectile>();
-            int random = Random.Range(0, 100);
-            if (usingGamepad)
+            if (WeaponsStats.instance.GetEquippedMod(currentWeapon).isStanceMod && !calledFromPrimary)
             {
-                float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
-                Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirection.x, 0, aimDirection.y) * Vector3.Distance(transform.position, new Vector3(aimDirection.x, 0, aimDirection.y));
-                bulletScriptRef.direction = shootDirection.normalized;
-                StartCoroutine(Recoil(shootDirection.normalized));
+                WeaponsStats.instance.ChangeStance(currentWeapon);
+                if (shotCoroutine != null)
+                    StopCoroutine(shotCoroutine);
+                if (secondaryShotCoroutine != null)
+                    StopCoroutine(secondaryShotCoroutine);
+                yield break;
             }
             else
             {
-                float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
-                Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z) * Vector3.Distance(transform.position, new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z));
-                bulletScriptRef.direction = shootDirection.normalized;
-                StartCoroutine(Recoil(shootDirection.normalized));
+                yield return WeaponsStats.instance.GetEquippedMod(currentWeapon).Shot();
             }
-            bulletScriptRef.speed = WeaponsStats.instance.GetProjectileSpeed(currentWeapon);
-            bulletScriptRef.range = WeaponsStats.instance.GetRange(currentWeapon);
-            if (currentWeapon == Weapons.flameThrower)
-                bulletScriptRef.isFlame = true;
-            bulletRef.SetActive(true);
+        }
+    }
+
+    public void CreateBullet(bool isMod)
+    {
+        if (isMod)
+        {
+            WeaponMod currentMod = WeaponsStats.instance.GetEquippedMod(currentWeapon);
+            currentMod.StartCoroutine(currentMod.ReloadSystem());
+            for (int i = 0; i < currentMod.GetProjectileByShoot(); i++)
+            {
+                GameObject bulletRef = Instantiate(currentMod.GetProjectile(), aimGuide.position, aimGuide.rotation);
+                bulletRef.transform.localScale *= currentMod.GetProjectileSize();
+                Projectile bulletScriptRef = bulletRef.GetComponent<Projectile>();
+                if (usingGamepad)
+                {
+                    float randomAngle = Random.Range(-currentMod.GetInaccuracyAngle(), currentMod.GetInaccuracyAngle());
+                    Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirection.x, 0, aimDirection.y) * Vector3.Distance(transform.position, new Vector3(aimDirection.x, 0, aimDirection.y));
+                    bulletScriptRef.direction = shootDirection.normalized;
+                    StartCoroutine(Recoil(shootDirection.normalized));
+                }
+                else
+                {
+                    float randomAngle = Random.Range(-currentMod.GetInaccuracyAngle(), currentMod.GetInaccuracyAngle());
+                    Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z) * Vector3.Distance(transform.position, new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z));
+                    bulletScriptRef.direction = shootDirection.normalized;
+                    StartCoroutine(Recoil(shootDirection.normalized));
+                }
+                bulletScriptRef.speed = currentMod.GetProjectileSpeed();
+                bulletScriptRef.range = currentMod.GetRange();
+                if (currentWeapon == Weapons.flameThrower)
+                    bulletScriptRef.isFlame = true;
+                bulletRef.SetActive(true);
+            }
+        }
+        else
+        {
+            WeaponsStats.instance.StartReloadSystem(currentWeapon);
+            for (int i = 0; i < WeaponsStats.instance.GetProjectileByShoot(currentWeapon); i++)
+            {
+                GameObject bulletRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
+                bulletRef.transform.localScale *= WeaponsStats.instance.GetProjectileSize(currentWeapon);
+                Projectile bulletScriptRef = bulletRef.GetComponent<Projectile>();
+                if (usingGamepad)
+                {
+                    float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
+                    Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirection.x, 0, aimDirection.y) * Vector3.Distance(transform.position, new Vector3(aimDirection.x, 0, aimDirection.y));
+                    bulletScriptRef.direction = shootDirection.normalized;
+                    StartCoroutine(Recoil(shootDirection.normalized));
+                }
+                else
+                {
+                    float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
+                    Vector3 shootDirection = Quaternion.AngleAxis(randomAngle, Vector3.up) * new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z) * Vector3.Distance(transform.position, new Vector3(aimDirectionMouse.x, 0, aimDirectionMouse.z));
+                    bulletScriptRef.direction = shootDirection.normalized;
+                    StartCoroutine(Recoil(shootDirection.normalized));
+                }
+                bulletScriptRef.speed = WeaponsStats.instance.GetProjectileSpeed(currentWeapon);
+                bulletScriptRef.range = WeaponsStats.instance.GetRange(currentWeapon);
+                if (currentWeapon == Weapons.flameThrower)
+                    bulletScriptRef.isFlame = true;
+                bulletRef.SetActive(true);
+            }
         }
     }
 
@@ -226,12 +325,16 @@ public class WeaponsManager : MonoBehaviour
     {
         if(newWeapon != currentWeapon)
         {
-            StopCoroutine("Shoot");
+            if(shotCoroutine != null)
+                StopCoroutine(shotCoroutine);
+            if(secondaryShotCoroutine != null)
+                StopCoroutine(secondaryShotCoroutine);
             PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-            startShootNeeded = false;
+            startShotNeeded = false;
             currentWeapon = newWeapon;
             if (PlayerMovementManager.instance.currentMovementState == PlayerMovementManager.MovementState.firing)
                 PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            WeaponsStats.instance.InstantiateMod(currentWeapon);
         }
     }
 

@@ -67,9 +67,17 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Shoot"",
+                    ""name"": ""Shot"",
                     ""type"": ""Button"",
                     ""id"": ""67831410-f105-485d-a534-b6803c12bf92"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SecondaryShot"",
+                    ""type"": ""Button"",
+                    ""id"": ""b47cbd01-7958-4388-8529-6a56d80051d7"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
@@ -156,7 +164,7 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""45e6bb53-f0c5-4b22-a5e5-2f5221d81035"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -222,11 +230,11 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4ecf8e29-b777-40a0-9ced-d193d80a1401"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Shot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -237,7 +245,29 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Shot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf9725cc-9480-4d61-992f-547a649875c1"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""SecondaryShot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f0c25ea-0463-4dfa-93fc-7f9d24f27b97"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SecondaryShot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -265,7 +295,8 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         m_Gameplay_WeaponsSelection = m_Gameplay.FindAction("WeaponsSelection", throwIfNotFound: true);
         m_Gameplay_AimDirection = m_Gameplay.FindAction("AimDirection", throwIfNotFound: true);
         m_Gameplay_MousePos = m_Gameplay.FindAction("MousePos", throwIfNotFound: true);
-        m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
+        m_Gameplay_Shot = m_Gameplay.FindAction("Shot", throwIfNotFound: true);
+        m_Gameplay_SecondaryShot = m_Gameplay.FindAction("SecondaryShot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -321,7 +352,8 @@ public class @ControlsMap : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_WeaponsSelection;
     private readonly InputAction m_Gameplay_AimDirection;
     private readonly InputAction m_Gameplay_MousePos;
-    private readonly InputAction m_Gameplay_Shoot;
+    private readonly InputAction m_Gameplay_Shot;
+    private readonly InputAction m_Gameplay_SecondaryShot;
     public struct GameplayActions
     {
         private @ControlsMap m_Wrapper;
@@ -332,7 +364,8 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         public InputAction @WeaponsSelection => m_Wrapper.m_Gameplay_WeaponsSelection;
         public InputAction @AimDirection => m_Wrapper.m_Gameplay_AimDirection;
         public InputAction @MousePos => m_Wrapper.m_Gameplay_MousePos;
-        public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
+        public InputAction @Shot => m_Wrapper.m_Gameplay_Shot;
+        public InputAction @SecondaryShot => m_Wrapper.m_Gameplay_SecondaryShot;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -360,9 +393,12 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 @MousePos.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMousePos;
                 @MousePos.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMousePos;
                 @MousePos.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMousePos;
-                @Shoot.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
-                @Shoot.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
-                @Shoot.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShoot;
+                @Shot.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShot;
+                @Shot.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShot;
+                @Shot.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShot;
+                @SecondaryShot.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryShot;
+                @SecondaryShot.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryShot;
+                @SecondaryShot.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryShot;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -385,9 +421,12 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 @MousePos.started += instance.OnMousePos;
                 @MousePos.performed += instance.OnMousePos;
                 @MousePos.canceled += instance.OnMousePos;
-                @Shoot.started += instance.OnShoot;
-                @Shoot.performed += instance.OnShoot;
-                @Shoot.canceled += instance.OnShoot;
+                @Shot.started += instance.OnShot;
+                @Shot.performed += instance.OnShot;
+                @Shot.canceled += instance.OnShot;
+                @SecondaryShot.started += instance.OnSecondaryShot;
+                @SecondaryShot.performed += instance.OnSecondaryShot;
+                @SecondaryShot.canceled += instance.OnSecondaryShot;
             }
         }
     }
@@ -418,6 +457,7 @@ public class @ControlsMap : IInputActionCollection, IDisposable
         void OnWeaponsSelection(InputAction.CallbackContext context);
         void OnAimDirection(InputAction.CallbackContext context);
         void OnMousePos(InputAction.CallbackContext context);
-        void OnShoot(InputAction.CallbackContext context);
+        void OnShot(InputAction.CallbackContext context);
+        void OnSecondaryShot(InputAction.CallbackContext context);
     }
 }

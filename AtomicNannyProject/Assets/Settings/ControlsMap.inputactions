@@ -54,9 +54,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Shoot",
+                    "name": "Shot",
                     "type": "Button",
                     "id": "67831410-f105-485d-a534-b6803c12bf92",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "SecondaryShot",
+                    "type": "Button",
+                    "id": "b47cbd01-7958-4388-8529-6a56d80051d7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -143,7 +151,7 @@
                 {
                     "name": "",
                     "id": "45e6bb53-f0c5-4b22-a5e5-2f5221d81035",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -209,11 +217,11 @@
                 {
                     "name": "",
                     "id": "4ecf8e29-b777-40a0-9ced-d193d80a1401",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Shoot",
+                    "action": "Shot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -224,7 +232,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Shoot",
+                    "action": "Shot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bf9725cc-9480-4d61-992f-547a649875c1",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "SecondaryShot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f0c25ea-0463-4dfa-93fc-7f9d24f27b97",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SecondaryShot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

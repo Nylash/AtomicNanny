@@ -20,18 +20,28 @@ public class Weapon
     public float projectileSpeed;
     public float projectileSize;
     public GameObject projectile;
+    public GameObject objectMod;
     [Header("RUNNING VARIABLES")]
+    public WeaponMod equippedMod;
     public bool reloading;
+    public bool isStanced;
 
     public IEnumerator ReloadSystem()
     {
         reloading = true;
         yield return new WaitForSeconds(Mathf.Abs(WeaponsStats.instance.GetFireRate(weapon) - WeaponsStats.instance.GetTimeBeforeFirstShoot(weapon)));
         reloading = false;
-        if (WeaponsManager.instance.startShootNeeded)
+        if (WeaponsManager.instance.startShotNeeded)
         {
-            WeaponsManager.instance.startShootNeeded = false;
-            WeaponsManager.instance.StartCoroutine("Shoot");
+            WeaponsManager.instance.startShotNeeded = false;
+            WeaponsManager.instance.shotCoroutine = WeaponsManager.instance.StartCoroutine(WeaponsManager.instance.Shoot());
         }
+    }
+
+    public IEnumerator ParallelReload()
+    {
+        reloading = true;
+        yield return new WaitForSeconds(Mathf.Abs(WeaponsStats.instance.GetFireRate(weapon) - WeaponsStats.instance.GetTimeBeforeFirstShoot(weapon)));
+        reloading = false;
     }
 }

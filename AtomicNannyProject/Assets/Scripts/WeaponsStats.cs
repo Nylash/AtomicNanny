@@ -95,6 +95,37 @@ public class WeaponsStats : MonoBehaviour
         StartCoroutine(GetWeapon(weapon.ToString()).ReloadSystem());
     }
 
+    public void StartParallelReload(WeaponsManager.Weapons weapon)
+    {
+        StartCoroutine(GetWeapon(weapon.ToString()).ParallelReload());
+    }
+
+    public WeaponMod GetEquippedMod(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).equippedMod;
+    }
+
+    public void ChangeStance(WeaponsManager.Weapons weapon)
+    {
+        GetWeapon(weapon.ToString()).isStanced = !GetWeapon(weapon.ToString()).isStanced;
+    }
+
+    public bool IsStanced(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).isStanced;
+    }
+
+    public void InstantiateMod(WeaponsManager.Weapons weapon)
+    {
+        if (!GetEquippedMod(weapon))
+        {
+            if (GetWeapon(weapon.ToString()).objectMod){
+                GameObject mod = Instantiate(GetWeapon(weapon.ToString()).objectMod);
+                GetWeapon(weapon.ToString()).equippedMod = mod.GetComponent<WeaponMod>();
+            }
+        }
+    }
+
     public Weapon GetWeapon(string name)
     {
         switch (name)

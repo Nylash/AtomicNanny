@@ -471,9 +471,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   aimGuide: {fileID: 888488068}
-  currentWeapon: 2
+  currentWeapon: 1
   aimDirectionMouse: {x: 0, y: 0, z: 0}
-  startShootNeeded: 0
+  startShotNeeded: 0
+  startSecondaryShotNeeded: 0
 --- !u!114 &280023502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,7 +502,10 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    objectMod: {fileID: 0}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
   shotgun:
     weapon: 1
     timeBeforeFirstShoot: 0
@@ -517,7 +521,11 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    objectMod: {fileID: 3946850457523194759, guid: 8a3f6b42e2732324b9f40990c7a83c58,
+      type: 3}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
   minigun:
     weapon: 2
     timeBeforeFirstShoot: 2
@@ -533,7 +541,10 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    objectMod: {fileID: 0}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
   raygun:
     weapon: 3
     timeBeforeFirstShoot: 0.5
@@ -549,7 +560,10 @@ MonoBehaviour:
     projectileSize: 0.1
     projectile: {fileID: 6622698582711927046, guid: 162a044c87a8d664592d49af9f48f5e5,
       type: 3}
+    objectMod: {fileID: 0}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
   plasmaRifle:
     weapon: 4
     timeBeforeFirstShoot: 0
@@ -565,7 +579,10 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    objectMod: {fileID: 0}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
   rocket:
     weapon: 5
     timeBeforeFirstShoot: 0
@@ -581,7 +598,10 @@ MonoBehaviour:
     projectileSize: 2
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    objectMod: {fileID: 0}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
   flameThrower:
     weapon: 6
     timeBeforeFirstShoot: 0
@@ -597,7 +617,10 @@ MonoBehaviour:
     projectileSize: 1
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
+    objectMod: {fileID: 0}
+    equippedMod: {fileID: 0}
     reloading: 0
+    isStanced: 0
 --- !u!1 &603531112
 GameObject:
   m_ObjectHideFlags: 0
