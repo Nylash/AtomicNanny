@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -22,14 +21,19 @@ public abstract class WeaponMod : MonoBehaviour
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).fireRate;
     }
 
-    public virtual int GetDamage()
+    public virtual float GetDamage()
     {
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).damage;
     }
 
-    public virtual int GetSplashDamage()
+    public virtual float GetSplashDamage()
     {
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).splashDamage;
+    }
+
+    public virtual float GetSplashDamageRadius()
+    {
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).splashDamageRadius;
     }
 
     public virtual int GetInaccuracyAngle()

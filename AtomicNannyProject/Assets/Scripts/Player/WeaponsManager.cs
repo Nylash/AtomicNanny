@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections;
 
 public class WeaponsManager : MonoBehaviour
@@ -10,6 +9,7 @@ public class WeaponsManager : MonoBehaviour
     [Header("CONFIGURATION")]
     public bool usingGamepad;
     public Transform aimGuide;
+    public LayerMask enemiesMask;
 #pragma warning disable 0649
     [SerializeField] LayerMask rayMask;
 #pragma warning restore 0649
@@ -234,6 +234,9 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.range = currentMod.GetRange();
                 if (currentWeapon == Weapons.flameThrower)
                     bulletScriptRef.isFlame = true;
+                bulletScriptRef.damage = currentMod.GetDamage();
+                bulletScriptRef.splashDamage = currentMod.GetSplashDamage();
+                bulletScriptRef.splashDamageRadius = currentMod.GetSplashDamageRadius();
                 bulletRef.SetActive(true);
             }
         }
@@ -263,18 +266,12 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.range = WeaponsStats.instance.GetRange(currentWeapon);
                 if (currentWeapon == Weapons.flameThrower)
                     bulletScriptRef.isFlame = true;
+                bulletScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
+                bulletScriptRef.splashDamage = WeaponsStats.instance.GetSplashDamage(currentWeapon);
+                bulletScriptRef.splashDamageRadius = WeaponsStats.instance.GetSplashDamageRadius(currentWeapon);
                 bulletRef.SetActive(true);
             }
         }
-    }
-
-    IEnumerator Recoil(Vector3 shootDirection)
-    {
-        PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon);
-        yield return new WaitForSeconds(.1f);
-        PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon)/2;
-        yield return new WaitForSeconds(.2f);
-        PlayerMovementManager.instance.recoil = Vector3.zero;
     }
 
     void CreateRay()
@@ -319,6 +316,16 @@ public class WeaponsManager : MonoBehaviour
         rayRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
         rayScriptRef = rayRef.GetComponent<RayBehaviour>();
         rayScriptRef.endPosition = endPos;
+        rayScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
+    }
+
+    IEnumerator Recoil(Vector3 shootDirection)
+    {
+        PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon);
+        yield return new WaitForSeconds(.1f);
+        PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon) / 2;
+        yield return new WaitForSeconds(.2f);
+        PlayerMovementManager.instance.recoil = Vector3.zero;
     }
 
     public void ChangeWeapon(Weapons newWeapon)

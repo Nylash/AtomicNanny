@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SplitShot : WeaponMod
@@ -45,6 +44,8 @@ public class SplitShot : WeaponMod
             }
             bulletScriptRef.speed = GetProjectileSpeed();
             bulletScriptRef.range = GetRange();
+            bulletScriptRef.damage = GetDamage();
+            bulletScriptRef.splashDamage = GetSplashDamage();
             bulletRef.SetActive(true);
             //Opposite shot
             bulletRef = Instantiate(GetProjectile(), WeaponsManager.instance.aimGuide.position, WeaponsManager.instance.aimGuide.rotation);
@@ -53,6 +54,8 @@ public class SplitShot : WeaponMod
             bulletScriptRef.direction = -shootDirection.normalized;
             bulletScriptRef.speed = GetProjectileSpeed();
             bulletScriptRef.range = GetRange();
+            bulletScriptRef.damage = GetDamage();
+            bulletScriptRef.splashDamage = GetSplashDamage();
             bulletRef.SetActive(true);
         }
     }

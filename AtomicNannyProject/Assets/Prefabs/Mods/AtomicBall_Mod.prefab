@@ -51,6 +51,7 @@ MonoBehaviour:
   timeBeforeFirstShoot: 0
   damage: 30
   splashDamage: 30
+  splashDamageRadius: 5
   projectileSpeed: 1
   projectileSize: 4
   projectile: {fileID: 5831981530988699494, guid: 55ddf01bcbc9be64ab37310028e462e1,

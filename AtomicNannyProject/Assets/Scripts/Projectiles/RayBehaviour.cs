@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RayBehaviour : MonoBehaviour
 {
+    [Header("VARIABLES")]
     public Vector3 endPosition;
     public float width;
+    public float damage;
 
     LineRenderer ray;
     float timer;

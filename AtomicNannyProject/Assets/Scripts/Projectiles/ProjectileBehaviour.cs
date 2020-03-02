@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
@@ -13,6 +11,9 @@ public class ProjectileBehaviour : MonoBehaviour
     public float speed;
     public float range;
     public bool isFlame;
+    public float damage;
+    public float splashDamage;
+    public float splashDamageRadius;
     
     Rigidbody rb;
     Vector3 birthPlace;
@@ -22,7 +23,7 @@ public class ProjectileBehaviour : MonoBehaviour
     float fullDistance;
     float startSpeed;
 
-    private void Start()
+    protected virtual void Start()
     {
         birthPlace = transform.position;
         rb = GetComponent<Rigidbody>();
@@ -35,7 +36,7 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         //Debug.DrawLine(transform.position, transform.position + direction, Color.red, 10);
         if (Vector3.Distance(birthPlace, transform.position) > range)
@@ -49,9 +50,34 @@ public class ProjectileBehaviour : MonoBehaviour
         }   
     }
 
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemyScriptRef = collision.gameObject.GetComponent<Enemy>();
+            enemyScriptRef.TakeDamage(damage);
+            if(splashDamage != 0)
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, splashDamageRadius, WeaponsManager.instance.enemiesMask);
+                foreach(Collider item in colliders)
+                {
+                    if (item.gameObject == collision.gameObject)
+                        continue;
+                    Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
+                    scriptRef.TakeDamage(splashDamage);
+                }
+            }
+            Destroy(gameObject);
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawCube(deathPlace, new Vector3(.1f,.1f,.1f));
+        if(splashDamage != 0)
+        {
+            Gizmos.DrawWireSphere(transform.position, splashDamageRadius);
+        }
     }
 }

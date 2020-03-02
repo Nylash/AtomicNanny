@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,8 +8,9 @@ public class Weapon
     public WeaponsManager.Weapons weapon;
     public float timeBeforeFirstShoot;
     public float fireRate;
-    public int damage;
-    public int splashDamage;
+    public float damage;
+    public float splashDamage;
+    public float splashDamageRadius;
     [Range(0,45)]
     public int inaccuracyAngle;
     public float ammunitionsConso;

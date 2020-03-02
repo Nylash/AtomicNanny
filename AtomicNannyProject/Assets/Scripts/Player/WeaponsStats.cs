@@ -35,14 +35,19 @@ public class WeaponsStats : MonoBehaviour
         return GetWeapon(weapon.ToString()).fireRate;
     }
 
-    public int GetDamage(WeaponsManager.Weapons weapon)
+    public float GetDamage(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).damage;
     }
 
-    public int GetSplashDamage(WeaponsManager.Weapons weapon)
+    public float GetSplashDamage(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).splashDamage;
+    }
+
+    public float GetSplashDamageRadius(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).splashDamageRadius;
     }
 
     public int GetInaccuracyAngle(WeaponsManager.Weapons weapon)

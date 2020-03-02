@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AtomicBall : WeaponMod
@@ -7,8 +6,9 @@ public class AtomicBall : WeaponMod
     [Header("STATS")]
     public float fireRate;
     public float timeBeforeFirstShoot;
-    public int damage;
-    public int splashDamage;
+    public float damage;
+    public float splashDamage;
+    public float splashDamageRadius;
     public float projectileSpeed;
     public float projectileSize;
     public GameObject projectile;
@@ -23,14 +23,19 @@ public class AtomicBall : WeaponMod
         return timeBeforeFirstShoot;
     }
 
-    public override int GetDamage()
+    public override float GetDamage()
     {
         return damage;
     }
 
-    public override int GetSplashDamage()
+    public override float GetSplashDamage()
     {
         return splashDamage;
+    }
+
+    public override float GetSplashDamageRadius()
+    {
+        return splashDamageRadius;
     }
 
     public override float GetProjectileSpeed()
