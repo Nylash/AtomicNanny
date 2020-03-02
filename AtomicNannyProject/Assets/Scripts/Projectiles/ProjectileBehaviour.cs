@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class ProjectileBehaviour : MonoBehaviour
 {
     [Header("CONFIGURATION")]
 #pragma warning disable 0649

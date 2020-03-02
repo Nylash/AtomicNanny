@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaygunProjectile : MonoBehaviour
+public class RayBehaviour : MonoBehaviour
 {
     public Vector3 endPosition;
     public float width;
@@ -31,7 +31,8 @@ public class RaygunProjectile : MonoBehaviour
     {
         Vector3 startPos = ray.GetPosition(0);
         Vector3 endPos = ray.GetPosition(1);
-        BoxCollider col = new GameObject("Collider").AddComponent<BoxCollider>();
+        BoxCollider col = new GameObject("RayCollider").AddComponent<BoxCollider>();
+        col.gameObject.tag = "Ray";
         col.transform.parent = ray.transform;
         float rayLength = Vector3.Distance(startPos, endPos);
         col.size = new Vector3(rayLength, width, width);

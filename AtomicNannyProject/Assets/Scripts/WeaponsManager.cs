@@ -9,9 +9,9 @@ public class WeaponsManager : MonoBehaviour
     #region CONFIGURATION
     [Header("CONFIGURATION")]
     public bool usingGamepad;
+    public Transform aimGuide;
 #pragma warning disable 0649
     [SerializeField] LayerMask rayMask;
-    [SerializeField] Transform aimGuide;
 #pragma warning restore 0649
     #endregion
 
@@ -25,11 +25,11 @@ public class WeaponsManager : MonoBehaviour
     [Header("VARIABLES")]
     public Weapons currentWeapon;
     public Vector3 aimDirectionMouse;
+    public Vector2 aimDirection;
     public Coroutine shotCoroutine;
     public Coroutine secondaryShotCoroutine;
     public bool startShotNeeded;
     public bool startSecondaryShotNeeded;
-    Vector2 aimDirection;
     Vector2 mousePosition;
     #endregion
 
@@ -215,7 +215,7 @@ public class WeaponsManager : MonoBehaviour
             {
                 GameObject bulletRef = Instantiate(currentMod.GetProjectile(), aimGuide.position, aimGuide.rotation);
                 bulletRef.transform.localScale *= currentMod.GetProjectileSize();
-                Projectile bulletScriptRef = bulletRef.GetComponent<Projectile>();
+                ProjectileBehaviour bulletScriptRef = bulletRef.GetComponent<ProjectileBehaviour>();
                 if (usingGamepad)
                 {
                     float randomAngle = Random.Range(-currentMod.GetInaccuracyAngle(), currentMod.GetInaccuracyAngle());
@@ -244,7 +244,7 @@ public class WeaponsManager : MonoBehaviour
             {
                 GameObject bulletRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
                 bulletRef.transform.localScale *= WeaponsStats.instance.GetProjectileSize(currentWeapon);
-                Projectile bulletScriptRef = bulletRef.GetComponent<Projectile>();
+                ProjectileBehaviour bulletScriptRef = bulletRef.GetComponent<ProjectileBehaviour>();
                 if (usingGamepad)
                 {
                     float randomAngle = Random.Range(-WeaponsStats.instance.GetInaccuracyAngle(currentWeapon), WeaponsStats.instance.GetInaccuracyAngle(currentWeapon));
@@ -281,7 +281,7 @@ public class WeaponsManager : MonoBehaviour
     {
         WeaponsStats.instance.StartReloadSystem(currentWeapon);
         GameObject rayRef;
-        RaygunProjectile rayScriptRef;
+        RayBehaviour rayScriptRef;
         if (usingGamepad)
         {
             RaycastHit hit;
@@ -314,10 +314,10 @@ public class WeaponsManager : MonoBehaviour
         rayRef.SetActive(true);
     }
 
-    void InstantiateRay(Vector3 endPos, out GameObject rayRef, out RaygunProjectile rayScriptRef)
+    void InstantiateRay(Vector3 endPos, out GameObject rayRef, out RayBehaviour rayScriptRef)
     {
         rayRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
-        rayScriptRef = rayRef.GetComponent<RaygunProjectile>();
+        rayScriptRef = rayRef.GetComponent<RayBehaviour>();
         rayScriptRef.endPosition = endPos;
     }
 
