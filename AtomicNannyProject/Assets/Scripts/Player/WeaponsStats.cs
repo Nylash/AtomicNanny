@@ -50,7 +50,7 @@ public class WeaponsStats : MonoBehaviour
         return GetWeapon(weapon.ToString()).splashDamageRadius;
     }
 
-    public int GetInaccuracyAngle(WeaponsManager.Weapons weapon)
+    public float GetInaccuracyAngle(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).inaccuracyAngle;
     }
