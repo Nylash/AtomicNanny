@@ -140,8 +140,11 @@ public class WeaponsWheelManager : MonoBehaviour
 
     void OpenWheel()
     {
-        wheelOpen = true;
-        weaponsWheel.enabled = true;
+        if (!WeaponsManager.instance.waitEndSpecificBehaviour)
+        {
+            wheelOpen = true;
+            weaponsWheel.enabled = true;
+        }
     }
 
     void CloseWheel()

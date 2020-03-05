@@ -474,7 +474,7 @@ MonoBehaviour:
   rayMask:
     serializedVersion: 2
     m_Bits: 3072
-  currentWeapon: 4
+  currentWeapon: 5
   aimDirectionMouse: {x: 0, y: 0, z: 0}
   aimDirection: {x: 0, y: 0}
   startShotNeeded: 0
@@ -505,6 +505,7 @@ MonoBehaviour:
     range: 20
     projectileSpeed: 20
     projectileSize: 1
+    enemyKnockback: 0
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
     objectMod: {fileID: 0}
@@ -525,6 +526,7 @@ MonoBehaviour:
     range: 10
     projectileSpeed: 20
     projectileSize: 1
+    enemyKnockback: 0
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
     objectMod: {fileID: 3946850457523194759, guid: 8a3f6b42e2732324b9f40990c7a83c58,
@@ -546,6 +548,7 @@ MonoBehaviour:
     range: 20
     projectileSpeed: 30
     projectileSize: 1
+    enemyKnockback: 0
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
     objectMod: {fileID: 6592204801137126057, guid: 3ef3f3e5d69a99e4ab2952a991170810,
@@ -567,6 +570,7 @@ MonoBehaviour:
     range: 20
     projectileSpeed: 0
     projectileSize: 0.1
+    enemyKnockback: 0
     projectile: {fileID: 6622698582711927046, guid: 162a044c87a8d664592d49af9f48f5e5,
       type: 3}
     objectMod: {fileID: 390167872382882598, guid: 2f816f7249f16c448a01f2eddc68d3f7,
@@ -588,9 +592,11 @@ MonoBehaviour:
     range: 20
     projectileSpeed: 12
     projectileSize: 1
+    enemyKnockback: 0
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
-    objectMod: {fileID: 0}
+    objectMod: {fileID: 3485539816985730208, guid: 98968e573b58cc34997a5e2db8808101,
+      type: 3}
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
@@ -608,9 +614,11 @@ MonoBehaviour:
     range: 20
     projectileSpeed: 10
     projectileSize: 2
+    enemyKnockback: 0
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
-    objectMod: {fileID: 0}
+    objectMod: {fileID: 7986575492908089380, guid: fe1688d4efb0c2246857884b7423a3c1,
+      type: 3}
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
@@ -628,6 +636,7 @@ MonoBehaviour:
     range: 3
     projectileSpeed: 2.5
     projectileSize: 1
+    enemyKnockback: 0
     projectile: {fileID: 5831981530988699494, guid: c148b36f21af36343b25e0d62d36e8f8,
       type: 3}
     objectMod: {fileID: 0}

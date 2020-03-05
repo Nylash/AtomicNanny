@@ -71,6 +71,11 @@ public abstract class WeaponMod : MonoBehaviour
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).projectileSize;
     }
 
+    public float GetEnemyKnockback()
+    {
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).enemyKnockback;
+    }
+
     public virtual GameObject GetProjectile()
     {
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).projectile;
@@ -91,7 +96,6 @@ public abstract class WeaponMod : MonoBehaviour
             case true :
                 if (WeaponsManager.instance.startSecondaryShotNeeded)
                 {
-                    //WeaponsStats.instance.StartParallelReload(attachedWeapon);
                     WeaponsManager.instance.startSecondaryShotNeeded = false;
                     WeaponsManager.instance.shotCoroutine = WeaponsManager.instance.StartCoroutine(WeaponsManager.instance.SecondaryShot(true));
                 }

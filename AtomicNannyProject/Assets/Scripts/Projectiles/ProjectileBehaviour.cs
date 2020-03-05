@@ -14,6 +14,7 @@ public class ProjectileBehaviour : MonoBehaviour
     public float damage;
     public float splashDamage;
     public float splashDamageRadius;
+    public float enemyKnockback;
     
     Rigidbody rb;
     Vector3 birthPlace;
@@ -65,6 +66,7 @@ public class ProjectileBehaviour : MonoBehaviour
                         continue;
                     Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
                     scriptRef.TakeDamage(splashDamage);
+                    //knockback
                 }
             }
             Destroy(gameObject);

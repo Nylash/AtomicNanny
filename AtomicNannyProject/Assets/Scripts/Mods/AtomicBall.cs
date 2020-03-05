@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class AtomicBall : WeaponMod
 {
-    [Header("STATS")]
-    public float fireRate;
-    public float timeBeforeFirstShoot;
+    [Header("SPECIFIC CONFIGURATION")]
+    public float cooldown;
+    public float timeBeforeShoot;
     public float damage;
     public float splashDamage;
     public float splashDamageRadius;
@@ -15,12 +15,12 @@ public class AtomicBall : WeaponMod
 
     public override float GetFireRate()
     {
-        return fireRate;
+        return cooldown;
     }
 
     public override float GetTimeBeforeFirstShoot()
     {
-        return timeBeforeFirstShoot;
+        return timeBeforeShoot;
     }
 
     public override float GetDamage()

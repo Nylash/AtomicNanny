@@ -30,6 +30,7 @@ public class WeaponsManager : MonoBehaviour
     public Coroutine secondaryShotCoroutine;
     public bool startShotNeeded;
     public bool startSecondaryShotNeeded;
+    public bool waitEndSpecificBehaviour;
     Vector2 mousePosition;
     #endregion
 
@@ -86,7 +87,7 @@ public class WeaponsManager : MonoBehaviour
 
     public void StartShooting(bool externalCall)
     {
-        if (!WeaponsWheelManager.instance.wheelOpen)
+        if (!WeaponsWheelManager.instance.wheelOpen && !waitEndSpecificBehaviour)
         {
             if (WeaponsStats.instance.IsStanced(currentWeapon))
             {
@@ -110,16 +111,19 @@ public class WeaponsManager : MonoBehaviour
 
     void StopShooting()
     {
-        if(shotCoroutine != null)
-            StopCoroutine(shotCoroutine);
-        PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-        startShotNeeded = false;
-        PlayerMovementManager.instance.recoil = Vector3.zero;
+        if (!waitEndSpecificBehaviour)
+        {
+            if (shotCoroutine != null)
+                StopCoroutine(shotCoroutine);
+            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            startShotNeeded = false;
+            PlayerMovementManager.instance.recoil = Vector3.zero;
+        }
     }
 
     public void StartSecondaryShot(bool externalCall)
     {
-        if (!WeaponsWheelManager.instance.wheelOpen)
+        if (!WeaponsWheelManager.instance.wheelOpen && !waitEndSpecificBehaviour)
         {
             secondaryShotCoroutine = StartCoroutine(SecondaryShot());
             if(shotCoroutine != null)
@@ -132,11 +136,14 @@ public class WeaponsManager : MonoBehaviour
 
     void StopSecondaryShot()
     {
-        if(secondaryShotCoroutine != null)
-            StopCoroutine(secondaryShotCoroutine);
-        PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-        startSecondaryShotNeeded = false;
-        PlayerMovementManager.instance.recoil = Vector3.zero;
+        if (!waitEndSpecificBehaviour)
+        {
+            if (secondaryShotCoroutine != null)
+                StopCoroutine(secondaryShotCoroutine);
+            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            startSecondaryShotNeeded = false;
+            PlayerMovementManager.instance.recoil = Vector3.zero;
+        }
     }
 
     public IEnumerator Shoot()
@@ -237,6 +244,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.damage = currentMod.GetDamage();
                 bulletScriptRef.splashDamage = currentMod.GetSplashDamage();
                 bulletScriptRef.splashDamageRadius = currentMod.GetSplashDamageRadius();
+                bulletScriptRef.enemyKnockback = currentMod.GetEnemyKnockback();
                 bulletRef.SetActive(true);
             }
         }
@@ -269,6 +277,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
                 bulletScriptRef.splashDamage = WeaponsStats.instance.GetSplashDamage(currentWeapon);
                 bulletScriptRef.splashDamageRadius = WeaponsStats.instance.GetSplashDamageRadius(currentWeapon);
+                bulletScriptRef.enemyKnockback = WeaponsStats.instance.GetEnemyKnockback(currentWeapon);
                 bulletRef.SetActive(true);
             }
         }

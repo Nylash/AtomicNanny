@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SplitShot : WeaponMod
 {
-    //[Header("STATS")]
+    //[Header("SPECIFIC CONFIGURATION")]
 
     public override IEnumerator Shot()
     {
@@ -46,6 +46,7 @@ public class SplitShot : WeaponMod
             bulletScriptRef.range = GetRange();
             bulletScriptRef.damage = GetDamage();
             bulletScriptRef.splashDamage = GetSplashDamage();
+            bulletScriptRef.enemyKnockback = GetEnemyKnockback();
             bulletRef.SetActive(true);
             //Opposite shot
             bulletRef = Instantiate(GetProjectile(), WeaponsManager.instance.aimGuide.position, WeaponsManager.instance.aimGuide.rotation);
@@ -56,6 +57,7 @@ public class SplitShot : WeaponMod
             bulletScriptRef.range = GetRange();
             bulletScriptRef.damage = GetDamage();
             bulletScriptRef.splashDamage = GetSplashDamage();
+            bulletScriptRef.enemyKnockback = GetEnemyKnockback();
             bulletRef.SetActive(true);
         }
     }

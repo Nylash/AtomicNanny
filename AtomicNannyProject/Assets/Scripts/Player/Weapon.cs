@@ -19,6 +19,7 @@ public class Weapon
     public float range;
     public float projectileSpeed;
     public float projectileSize;
+    public float enemyKnockback;
     public GameObject projectile;
     public GameObject objectMod;
     [Header("RUNNING VARIABLES")]
@@ -36,12 +37,5 @@ public class Weapon
             WeaponsManager.instance.startShotNeeded = false;
             WeaponsManager.instance.shotCoroutine = WeaponsManager.instance.StartCoroutine(WeaponsManager.instance.Shoot());
         }
-    }
-
-    public IEnumerator ParallelReload()
-    {
-        reloading = true;
-        yield return new WaitForSeconds(Mathf.Abs(WeaponsStats.instance.GetFireRate(weapon) - WeaponsStats.instance.GetTimeBeforeFirstShoot(weapon)));
-        reloading = false;
     }
 }

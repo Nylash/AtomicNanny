@@ -85,6 +85,11 @@ public class WeaponsStats : MonoBehaviour
         return GetWeapon(weapon.ToString()).projectileSize;
     }
 
+    public float GetEnemyKnockback(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).enemyKnockback;
+    }
+
     public GameObject GetProjectile(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).projectile;
@@ -98,11 +103,6 @@ public class WeaponsStats : MonoBehaviour
     public void StartReloadSystem(WeaponsManager.Weapons weapon)
     {
         StartCoroutine(GetWeapon(weapon.ToString()).ReloadSystem());
-    }
-
-    public void StartParallelReload(WeaponsManager.Weapons weapon)
-    {
-        StartCoroutine(GetWeapon(weapon.ToString()).ParallelReload());
     }
 
     public WeaponMod GetEquippedMod(WeaponsManager.Weapons weapon)

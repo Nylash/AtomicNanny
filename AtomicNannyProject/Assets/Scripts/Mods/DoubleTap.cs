@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DoubleTap : WeaponMod
 {
-    [Header("STATS")]
+    [Header("SPECIFIC CONFIGURATION")]
     public float timeBetweenShots;
 
     public override IEnumerator Shot()
