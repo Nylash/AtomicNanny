@@ -13,6 +13,8 @@ public class AtomicBall : WeaponMod
     public float projectileSize;
     public GameObject projectile;
 
+    //Override GET_METHODS for specifics statistics
+    #region GET_METHODS
     public override float GetFireRate()
     {
         return cooldown;
@@ -52,8 +54,9 @@ public class AtomicBall : WeaponMod
     {
         return projectile;
     }
+    #endregion
 
-    public override IEnumerator Shot()
+    public override IEnumerator ModShot()
     {
         if (reloading)
         {

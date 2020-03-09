@@ -4,6 +4,7 @@ public class ProjectileBehaviour : MonoBehaviour
 {
     [Header("CONFIGURATION")]
 #pragma warning disable 0649
+    //Curve used to set flame speed
     [SerializeField] AnimationCurve flameSpeedCurve;
 #pragma warning restore 0649
     [Header("VARIABLES")]
@@ -24,6 +25,7 @@ public class ProjectileBehaviour : MonoBehaviour
     float fullDistance;
     float startSpeed;
 
+    //Here we initialize the projectile
     protected virtual void Start()
     {
         birthPlace = transform.position;
@@ -37,9 +39,11 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
+    //Destroy the projectile when it reach its range
+    //If it's a flame we adapt the speed according to the curve and the distance done
+    //When it overpass 90% of the full distance it has to do we destroy it, because it will never reach the full distance (at the end of the curve the speed is 0 so it stop just before)
     protected virtual void Update()
     {
-        //Debug.DrawLine(transform.position, transform.position + direction, Color.red, 10);
         if (Vector3.Distance(birthPlace, transform.position) > range)
             Destroy(gameObject);
         if (isFlame)
@@ -51,16 +55,19 @@ public class ProjectileBehaviour : MonoBehaviour
         }   
     }
 
+    //Behaviour when it collide with something
+    //If it's an enemy it applied damage and knockback to it then dies
+    //Otherwise it simply died
     protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyScriptRef = collision.gameObject.GetComponent<Enemy>();
             enemyScriptRef.TakeDamage(damage);
-            if(splashDamage != 0)
+            if (splashDamage != 0)
             {
                 Collider[] colliders = Physics.OverlapSphere(transform.position, splashDamageRadius, WeaponsManager.instance.enemiesMask);
-                foreach(Collider item in colliders)
+                foreach (Collider item in colliders)
                 {
                     if (item.gameObject == collision.gameObject)
                         continue;
@@ -71,8 +78,11 @@ public class ProjectileBehaviour : MonoBehaviour
             }
             Destroy(gameObject);
         }
+        else
+            Destroy(gameObject);
     }
 
+    //Used to see where the projectile should end
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;

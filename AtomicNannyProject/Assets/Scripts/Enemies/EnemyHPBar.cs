@@ -17,6 +17,7 @@ public class EnemyHPBar : MonoBehaviour
         fillBar = transform.GetChild(1).GetComponent<Image>();
     }
 
+    //Follow enemy with an offset on Y (height)
     void Update()
     {
         transform.position = new Vector3(target.position.x, offset.y, target.position.z);

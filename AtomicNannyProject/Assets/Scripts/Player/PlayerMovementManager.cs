@@ -65,11 +65,13 @@ public class PlayerMovementManager : MonoBehaviour
         {
             switch (currentMovementState)
             {
+                //Move in function of current input
                 case MovementState.moving:
                     controller.Move(new Vector3(movementDirection.x, 0, movementDirection.y) * normalSpeed * Time.deltaTime);
                     anim.SetFloat("InputX", movementDirection.x);
                     anim.SetFloat("InputY", movementDirection.y);
                     break;
+                //Move to imitate recoil of weapons (the value is fix in WeaponsManager)
                 case MovementState.firing:
                     controller.Move(recoil * Time.deltaTime);
                     if (WeaponsManager.instance.usingGamepad)
@@ -83,6 +85,7 @@ public class PlayerMovementManager : MonoBehaviour
                         anim.SetFloat("InputY", WeaponsManager.instance.aimDirectionMouse.z);
                     }
                     break;
+                //Linear movement calculate in Dash function
                 case MovementState.dashing:
                     controller.Move(new Vector3(dashDirection.x, 0, dashDirection.y) * dashSpeed * Time.deltaTime);
                     anim.SetFloat("InputX", dashDirection.x);
@@ -94,6 +97,8 @@ public class PlayerMovementManager : MonoBehaviour
         }
     }
 
+
+    //Coroutine which launch dash and handle its cooldown
     IEnumerator Dash()
     {
         if (!WeaponsWheelManager.instance.wheelOpen)
@@ -119,11 +124,6 @@ public class PlayerMovementManager : MonoBehaviour
             movementDirection = ctx.ReadValue<Vector2>();
             dashDirection = ctx.ReadValue<Vector2>();
         }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        print("zoulou");
     }
 
     public enum MovementState

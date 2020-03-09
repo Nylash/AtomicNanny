@@ -7,7 +7,7 @@ public class WeaponsManager : MonoBehaviour
 
     #region CONFIGURATION
     [Header("CONFIGURATION")]
-    public bool usingGamepad;
+    public bool usingGamepad; //usingGamepad will be eventually remplace by a check of PlayerInput.currentScheme when this feature will be corrected in the NewInputSystem
     public Transform aimGuide;
     public LayerMask enemiesMask;
 #pragma warning disable 0649
@@ -26,9 +26,9 @@ public class WeaponsManager : MonoBehaviour
     public Weapons currentWeapon;
     public Vector3 aimDirectionMouse;
     public Vector2 aimDirection;
-    public Coroutine shotCoroutine;
+    public Coroutine primaryShotCoroutine;
     public Coroutine secondaryShotCoroutine;
-    public bool startShotNeeded;
+    public bool startPrimaryShotNeeded;
     public bool startSecondaryShotNeeded;
     public bool waitEndSpecificBehaviour;
     Vector2 mousePosition;
@@ -48,19 +48,22 @@ public class WeaponsManager : MonoBehaviour
 
         controlsMap.Gameplay.AimDirection.performed += ctx => aimDirection = ctx.ReadValue<Vector2>();
         controlsMap.Gameplay.MousePos.performed += ctx => mousePosition = ctx.ReadValue<Vector2>();
-        controlsMap.Gameplay.Shot.started += ctx => StartShooting(false);
-        controlsMap.Gameplay.Shot.canceled += ctx => StopShooting();
-        controlsMap.Gameplay.SecondaryShot.started += ctx => StartSecondaryShot(false);
+        controlsMap.Gameplay.Shot.started += ctx => StartPrimaryShot();
+        controlsMap.Gameplay.Shot.canceled += ctx => StopPrimaryShot();
+        controlsMap.Gameplay.SecondaryShot.started += ctx => StartSecondaryShot();
         controlsMap.Gameplay.SecondaryShot.canceled += ctx => StopSecondaryShot();
 
         aimDirection = transform.right;
     }
 
+    //Instantiate the current mod to be sure it exists
     private void Start()
     {
         WeaponsStats.instance.InstantiateMod(currentWeapon);
     }
 
+    //Update aimGuide position on each frame depending on the input
+    //cf com on usingGamepad variable
     private void Update()
     {
         if (!WeaponsWheelManager.instance.wheelOpen)
@@ -85,7 +88,11 @@ public class WeaponsManager : MonoBehaviour
         }
     }
 
-    public void StartShooting(bool externalCall)
+    //Method call when the play press PrimaryShot input, the result is that a Coroutine will be started, depending on if the weapon is stanced or not
+    //If not, we start the PrimaryShot Coroutine otherwise we start SecondaryShot Coroutine with parameter true to explicit this is call from PrimaryShot input
+    //This way, instead of changing weapon's stance we call the mod's Shot method
+    //Before starting the coroutine, we stop the SecondaryShot Coroutine if it is started
+    public void StartPrimaryShot()
     {
         if (!WeaponsWheelManager.instance.wheelOpen && !waitEndSpecificBehaviour)
         {
@@ -93,47 +100,47 @@ public class WeaponsManager : MonoBehaviour
             {
                 if (secondaryShotCoroutine != null)
                     StopCoroutine(secondaryShotCoroutine);
-                shotCoroutine = StartCoroutine(SecondaryShot(true));
-                if (!externalCall)
-                    PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+                primaryShotCoroutine = StartCoroutine(SecondaryShot(true));
+                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
             }
             else
             {
-                shotCoroutine = StartCoroutine(Shoot());
+                primaryShotCoroutine = StartCoroutine(PrimaryShot());
                 if (secondaryShotCoroutine != null)
                     StopCoroutine(secondaryShotCoroutine);
                 startSecondaryShotNeeded = false;
-                if (!externalCall)
-                    PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
             }
         }
     }
 
-    void StopShooting()
+    //When the input is release we stop primaryShotCoroutine, and we don't care if the weapon is stanced or not, because this variable always contains the right coroutine
+    void StopPrimaryShot()
     {
         if (!waitEndSpecificBehaviour)
         {
-            if (shotCoroutine != null)
-                StopCoroutine(shotCoroutine);
+            if (primaryShotCoroutine != null)
+                StopCoroutine(primaryShotCoroutine);
             PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-            startShotNeeded = false;
+            startPrimaryShotNeeded = false;
             PlayerMovementManager.instance.recoil = Vector3.zero;
         }
     }
 
-    public void StartSecondaryShot(bool externalCall)
+    //Here we simply start SecondaryShot coroutine and stop PrimaryShot coroutine if it was running
+    public void StartSecondaryShot()
     {
         if (!WeaponsWheelManager.instance.wheelOpen && !waitEndSpecificBehaviour)
         {
             secondaryShotCoroutine = StartCoroutine(SecondaryShot());
-            if(shotCoroutine != null)
-                StopCoroutine(shotCoroutine);
-            startShotNeeded = false;
-            if (!externalCall)
-                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
+            if(primaryShotCoroutine != null)
+                StopCoroutine(primaryShotCoroutine);
+            startPrimaryShotNeeded = false;
+            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.firing;
         }
     }
 
+    //The SecondaryShot input is release so we stop related Coroutine
     void StopSecondaryShot()
     {
         if (!waitEndSpecificBehaviour)
@@ -146,10 +153,14 @@ public class WeaponsManager : MonoBehaviour
         }
     }
 
-    public IEnumerator Shoot()
+    //Coroutine handling PrimaryShot behaviour depending on currentWeapon
+    public IEnumerator PrimaryShot()
     {
         switch (currentWeapon)
         {
+            //Minigun has a specific case to simulate the charging time of minigun weapon
+            //Dividing by 2 then 3 then 6 seems to be the same amount as GetTimeBeforeFirstShoot
+            //There is no check for reloading because the fire is so small we don't take care of it
             case Weapons.minigun:
                 float time = WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon);
                 yield return new WaitForSeconds(time / 2);
@@ -158,15 +169,19 @@ public class WeaponsManager : MonoBehaviour
                 CreateBullet(false);
                 yield return new WaitForSeconds(time / 6);
                 CreateBullet(false);
+                //Then while there is enough amunition to shot again we shot again
                 while (true)
                 {
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
                     CreateBullet(false);
                 }
+            //The raygun works the same way of others weapons but it shots ray instead of bullet so it needs a specific case
+            //If the weapon is realoding we cancel the coroutine but we pass a bool at true, so at the end of the reload if it's still true the coroutine will be recall
+            //The boolean is pass to false when the player release the input
             case Weapons.raygun:
                 if (WeaponsStats.instance.IsReloading(currentWeapon))
                 {
-                    startShotNeeded = true;
+                    startPrimaryShotNeeded = true;
                     yield break;
                 }
                 yield return new WaitForSeconds(WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
@@ -176,10 +191,11 @@ public class WeaponsManager : MonoBehaviour
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
                     CreateRay();
                 }
+            //Same case as the raygun but creating bullet instead of ray
             default:
                 if (WeaponsStats.instance.IsReloading(currentWeapon))
                 {
-                    startShotNeeded = true;
+                    startPrimaryShotNeeded = true;
                     yield break;
                 }
                 yield return new WaitForSeconds(WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
@@ -192,6 +208,8 @@ public class WeaponsManager : MonoBehaviour
         }
     }
 
+    //Here we test if the mod is a stanceMod, if it is the case and it isn't called by PrimaryShot input we simply change currentWeapon's stance
+    //Otherwise, we return the coroutine define in the mod's script
     public IEnumerator SecondaryShot(bool calledFromPrimary = false)
     {
         if (WeaponsStats.instance.GetEquippedMod(currentWeapon))
@@ -199,19 +217,26 @@ public class WeaponsManager : MonoBehaviour
             if (WeaponsStats.instance.GetEquippedMod(currentWeapon).isStanceMod && !calledFromPrimary)
             {
                 WeaponsStats.instance.ChangeStance(currentWeapon);
-                if (shotCoroutine != null)
-                    StopCoroutine(shotCoroutine);
+                if (primaryShotCoroutine != null)
+                    StopCoroutine(primaryShotCoroutine);
                 if (secondaryShotCoroutine != null)
                     StopCoroutine(secondaryShotCoroutine);
                 yield break;
             }
             else
             {
-                yield return WeaponsStats.instance.GetEquippedMod(currentWeapon).Shot();
+                yield return WeaponsStats.instance.GetEquippedMod(currentWeapon).ModShot();
             }
         }
     }
 
+    //This method has a big if, but the difference between true or false is only the reference, to the scriptMod or to currentWeapon, besides this, this is the exact same thing
+    //We begin by putting the weapon in reaload, then we got a loop which will create as many protectile as define by the weapon/mod
+    //We instantiate the projectile and get the script reference for it
+    //We calcul a shotDirection modify by the innacuracyAngle (and depending on current input Mouse or Pad) cf com on usingGamepad variable
+    //We start Recoil coroutine (see below)
+    //We add all the variables the script need, such as speed, direction, damage...
+    //And finally we activate the bullet
     public void CreateBullet(bool isMod)
     {
         if (isMod)
@@ -283,6 +308,8 @@ public class WeaponsManager : MonoBehaviour
         }
     }
 
+    //It works pretty in the same way as CreateBullet just we don't care about innacuracyAngle and we need to do a raycast to know if the ray go full range or is stop by an obstacle
+    //Besides this we pass all required variables to the ray's script then we activate the ray
     void CreateRay()
     {
         WeaponsStats.instance.StartReloadSystem(currentWeapon);
@@ -320,6 +347,7 @@ public class WeaponsManager : MonoBehaviour
         rayRef.SetActive(true);
     }
 
+    //Here instantiate the RayObject and pass out some references
     void InstantiateRay(Vector3 endPos, out GameObject rayRef, out RayBehaviour rayScriptRef)
     {
         rayRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
@@ -328,6 +356,9 @@ public class WeaponsManager : MonoBehaviour
         rayScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
     }
 
+    //This coroutine handle Recoil, it is simply a movement in the opposite direction of shoot
+    //There to step, one shorter but stronger and another longer but softer
+    //Then after some time we fix the recoil to 0 to stop the movement
     IEnumerator Recoil(Vector3 shootDirection)
     {
         PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon);
@@ -337,16 +368,17 @@ public class WeaponsManager : MonoBehaviour
         PlayerMovementManager.instance.recoil = Vector3.zero;
     }
 
+    //Method used to change currentWeapon, we stop all coroutine set some bool to false and instance the mod to get a reference to it if needed
     public void ChangeWeapon(Weapons newWeapon)
     {
         if(newWeapon != currentWeapon)
         {
-            if(shotCoroutine != null)
-                StopCoroutine(shotCoroutine);
+            if(primaryShotCoroutine != null)
+                StopCoroutine(primaryShotCoroutine);
             if(secondaryShotCoroutine != null)
                 StopCoroutine(secondaryShotCoroutine);
-            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-            startShotNeeded = false;
+            startPrimaryShotNeeded = false;
+            startSecondaryShotNeeded = false;
             currentWeapon = newWeapon;
             if (PlayerMovementManager.instance.currentMovementState == PlayerMovementManager.MovementState.firing)
                 PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;

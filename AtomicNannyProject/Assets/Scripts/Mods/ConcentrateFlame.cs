@@ -10,6 +10,8 @@ public class ConcentrateFlame : WeaponMod
     public float range;
     public float projectileSpeed;
 
+    //Override GET_METHODS for specifics statistics
+    #region GET_METHODS
     public override float GetInaccuracyAngle()
     {
         return inaccuracyAngle;
@@ -24,8 +26,9 @@ public class ConcentrateFlame : WeaponMod
     {
         return projectileSpeed;
     }
+    #endregion
 
-    public override IEnumerator Shot()
+    public override IEnumerator ModShot()
     {
         if (reloading)
         {

@@ -13,6 +13,8 @@ public class EnergyWave : WeaponMod
     //temporary
     bool display;
 
+    //Override GET_METHODS for specifics statistics
+    #region GET_METHODS
     public override float GetFireRate()
     {
         return cooldown;
@@ -22,8 +24,10 @@ public class EnergyWave : WeaponMod
     {
         return damage;
     }
+    #endregion
 
-    public override IEnumerator Shot()
+    //Call DoExplosion and display a Gizmos for 1 second (waiting for FX)
+    public override IEnumerator ModShot()
     {
         if (reloading)
         {
@@ -31,6 +35,7 @@ public class EnergyWave : WeaponMod
             yield break;
         }
         display = true;
+        StartCoroutine(ReloadSystem());
         DoExplosion();
         yield return new WaitForSeconds(1);
         display = false;
@@ -44,9 +49,9 @@ public class EnergyWave : WeaponMod
         }
     }
 
+    //Simply do a OverlapSphere and apply damage to all enemies in the sphere
     void DoExplosion()
     {
-        StartCoroutine(ReloadSystem());
         Collider[] colliders = Physics.OverlapSphere(WeaponsManager.instance.aimGuide.position, explosionRadius, WeaponsManager.instance.enemiesMask);
         foreach (Collider item in colliders)
         {

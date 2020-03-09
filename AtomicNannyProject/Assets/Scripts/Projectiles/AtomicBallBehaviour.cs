@@ -2,6 +2,8 @@
 
 public class AtomicBallBehaviour : ProjectileBehaviour
 {
+    //Override of Projectile class, with an explosion on CollisionEnter and a trigger detector
+
     /*protected override void Start()
     {
         base.Start();

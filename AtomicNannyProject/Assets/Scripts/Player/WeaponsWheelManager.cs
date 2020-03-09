@@ -60,6 +60,7 @@ public class WeaponsWheelManager : MonoBehaviour
     {
         if (wheelOpen)
         {
+            //Since the script WeaponsManager is blocked during the wheel we need to get the input directly here (cf usingGamepad com on WeaponsManager)
             if (!WeaponsManager.instance.usingGamepad) {
                 Ray ray = Camera.main.ScreenPointToRay(mousePosition);
                 Plane plane = new Plane(Vector3.up, Vector3.zero);
@@ -77,6 +78,7 @@ public class WeaponsWheelManager : MonoBehaviour
                 if (!arrow.enabled)
                     arrow.enabled = true;
 
+                //Once we get the inputDirection we calculate an angle to know where it is, then depending on this angle, we know which weapon is selected (the space is divided in seven like a pizza)
                 float angle = Vector2.SignedAngle(new Vector2(1, 0), inputDirection);
                 arrow.transform.eulerAngles= new Vector3(0, 0, angle - 90 );
 
@@ -120,6 +122,7 @@ public class WeaponsWheelManager : MonoBehaviour
         }
     }
 
+    //Here we highlight the selected weapon and stock a reference to it
     void HighlightWeapon(Image weapon)
     {
         if (highlightedWeapon)
@@ -147,6 +150,7 @@ public class WeaponsWheelManager : MonoBehaviour
         }
     }
 
+    //When we close the wheel if there is a selected weapon we say to WeaponsManager to equip it
     void CloseWheel()
     {
         wheelOpen = false;
@@ -159,6 +163,7 @@ public class WeaponsWheelManager : MonoBehaviour
         }    
     }
 
+    //This method is used to reset to 0 the input if the player release the pad, this way there is no strange behaviour
     void StopPadInput()
     {
         inputDirection = Vector2.zero;

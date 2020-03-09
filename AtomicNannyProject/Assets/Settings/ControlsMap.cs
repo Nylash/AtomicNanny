@@ -263,7 +263,7 @@ public class @ControlsMap : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9f0c25ea-0463-4dfa-93fc-7f9d24f27b97"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",

@@ -18,6 +18,8 @@ public class RocketJump : WeaponMod
     float currentJumpTime;
     Vector3 jumpDirection;
 
+    //Override GET_METHODS for specifics statistics
+    #region GET_METHODS
     public override float GetFireRate()
     {
         return cooldown;
@@ -27,7 +29,9 @@ public class RocketJump : WeaponMod
     {
         return timeBeforeJump;
     }
+    #endregion
 
+    //Lerp heigh of movement based on current jump time elapsed
     private void Update()
     {
         if (startJumping)
@@ -42,7 +46,11 @@ public class RocketJump : WeaponMod
         }
     }
 
-    public override IEnumerator Shot()
+    //I use the recoil system to make the jump, but instead of make the player move backward I make in go in the shotDirection and I change the height on Update
+    //At the half of jump duration I change a bool so instead of increase the jump height will decrease
+    //The character never reach is original Y so at the end of the jump I manually fix it to what it was before the jump
+    //Finally I put PlayerMovementManager in Moving state because this shot is a SpecificBehaviour which doesn't restart if we keep the input on, since the CD must be high this is not an issue
+    public override IEnumerator ModShot()
     {
         if (reloading)
         {
@@ -69,6 +77,7 @@ public class RocketJump : WeaponMod
         WeaponsManager.instance.waitEndSpecificBehaviour = false;
     }
 
+    //Simply do a OverlapSphere and apply damage to all enemies in the sphere
     void DoExplosion()
     {
         Collider[] colliders = Physics.OverlapSphere(WeaponsManager.instance.aimGuide.position, explosionRadius, WeaponsManager.instance.enemiesMask);
@@ -81,6 +90,7 @@ public class RocketJump : WeaponMod
         //throw fx
     }
 
+    //Calculate the direction as the same way in a classic shot
     void CalculateDirection()
     {
         Vector3 shootDirection;

@@ -10,6 +10,7 @@ public class RayBehaviour : MonoBehaviour
     LineRenderer ray;
     float timer;
 
+    //Initialize differents variables
     private void Start()
     {
         gameObject.AddComponent<LineRenderer>();
@@ -20,13 +21,15 @@ public class RayBehaviour : MonoBehaviour
         AddCollider();
     }
 
+    //Destroy the ray after .5 seconde
     private void Update()
     {
         timer += Time.deltaTime;
-		if (timer > 1)
+		if (timer > .5f)
             Destroy(gameObject);
     }
 
+    //Add a collider to the ray
     void AddCollider()
     {
         Vector3 startPos = ray.GetPosition(0);

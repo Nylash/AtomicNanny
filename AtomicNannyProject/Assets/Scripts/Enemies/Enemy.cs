@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     public GameObject hpBarRef;
     public EnemyHPBar hpBarScriptRef;
 
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -20,6 +21,8 @@ public class Enemy : MonoBehaviour
         hpBarScriptRef.maxHealth = maxHealth;
     }
 
+
+    //Apply damage to enemy & call update on hpBar
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;

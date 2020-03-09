@@ -6,6 +6,7 @@ public class WeaponsStats : MonoBehaviour
 
     #region CONFIGURATION
     [Header("CONFIGURATION")]
+    //All the values are directly configure in the inspector
 #pragma warning disable 0649
     [SerializeField] Weapon pistol;
     [SerializeField] Weapon shotgun;
@@ -25,6 +26,8 @@ public class WeaponsStats : MonoBehaviour
             Destroy(gameObject);
     }
 
+    //All method used to get statistics of the specified weapon
+    #region GET_METHOD
     public float GetTimeBeforeFirstShoot(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).timeBeforeFirstShoot;
@@ -119,7 +122,9 @@ public class WeaponsStats : MonoBehaviour
     {
         return GetWeapon(weapon.ToString()).isStanced;
     }
+    #endregion
 
+    //Method used to instantiate the currendWeapon's mod, if there is one, to get a reference to it
     public void InstantiateMod(WeaponsManager.Weapons weapon)
     {
         if (!GetEquippedMod(weapon))
@@ -131,6 +136,7 @@ public class WeaponsStats : MonoBehaviour
         }
     }
 
+    //Method used to get a reference to the Weapon class from a string
     public Weapon GetWeapon(string name)
     {
         switch (name)

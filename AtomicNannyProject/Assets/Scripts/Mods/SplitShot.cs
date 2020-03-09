@@ -5,7 +5,8 @@ public class SplitShot : WeaponMod
 {
     //[Header("SPECIFIC CONFIGURATION")]
 
-    public override IEnumerator Shot()
+        //Same behaviour as the primary shot of the minigun
+    public override IEnumerator ModShot()
     {
         float time = GetTimeBeforeFirstShoot();
         yield return new WaitForSeconds(time / 2);
@@ -21,6 +22,7 @@ public class SplitShot : WeaponMod
         }
     }
 
+    //Same method as one present in WeaponsManager but when the bullet is created I directly create a second one but with the opposite direction
     void CreateBullet()
     {
         StartCoroutine(ReloadSystem());

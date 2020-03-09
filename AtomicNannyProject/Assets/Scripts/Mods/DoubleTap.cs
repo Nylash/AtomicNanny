@@ -6,7 +6,9 @@ public class DoubleTap : WeaponMod
     [Header("SPECIFIC CONFIGURATION")]
     public float timeBetweenShots;
 
-    public override IEnumerator Shot()
+
+    //Simply add a second shot after the first to do the double tap effect
+    public override IEnumerator ModShot()
     {
         if (reloading)
         {
