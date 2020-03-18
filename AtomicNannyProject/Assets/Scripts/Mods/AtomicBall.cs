@@ -9,6 +9,7 @@ public class AtomicBall : WeaponMod
     public float damage;
     public float splashDamage;
     public float splashDamageRadius;
+    public float ammoCons;
     public float projectileSpeed;
     public float projectileSize;
     public GameObject projectile;
@@ -40,6 +41,11 @@ public class AtomicBall : WeaponMod
         return splashDamageRadius;
     }
 
+    public override float GetAmmunitionConso()
+    {
+        return ammoCons;
+    }
+
     public override float GetProjectileSpeed()
     {
         return projectileSpeed;
@@ -63,12 +69,19 @@ public class AtomicBall : WeaponMod
             WeaponsManager.instance.startSecondaryShotNeeded = true;
             yield break;
         }
-        yield return new WaitForSeconds(GetTimeBeforeFirstShoot());
-        WeaponsManager.instance.CreateBullet(true);
-        while (true)
+        if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
         {
-            yield return new WaitForSeconds(GetFireRate());
+            yield return new WaitForSeconds(GetTimeBeforeFirstShoot());
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
             WeaponsManager.instance.CreateBullet(true);
+            while (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
+            {
+                yield return new WaitForSeconds(GetFireRate());
+                AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
+                WeaponsManager.instance.CreateBullet(true);
+            }
         }
+        print("not enough ammo");
+        //Not enough ammo
     }
 }

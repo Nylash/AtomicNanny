@@ -6,20 +6,36 @@ public class SplitShot : WeaponMod
     //[Header("SPECIFIC CONFIGURATION")]
 
         //Same behaviour as the primary shot of the minigun
+        //I double GetAmmoCons because each time this mod shot 2 projectiles are launched
     public override IEnumerator ModShot()
     {
         float time = GetTimeBeforeFirstShoot();
-        yield return new WaitForSeconds(time / 2);
-        CreateBullet();
-        yield return new WaitForSeconds(time / 3);
-        CreateBullet();
-        yield return new WaitForSeconds(time / 6);
-        CreateBullet();
-        while (true)
+        if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso() * 2, GetAmmoType()))
         {
-            yield return new WaitForSeconds(GetFireRate());
+            yield return new WaitForSeconds(time / 2);
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso() * 2, GetAmmoType());
             CreateBullet();
+            if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso() * 2, GetAmmoType()))
+            {
+                yield return new WaitForSeconds(time / 3);
+                AmmunitionManager.instance.UseAmmo(GetAmmunitionConso() * 2, GetAmmoType());
+                CreateBullet();
+                if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso() * 2, GetAmmoType()))
+                {
+                    yield return new WaitForSeconds(time / 6);
+                    AmmunitionManager.instance.UseAmmo(GetAmmunitionConso() * 2, GetAmmoType());
+                    CreateBullet();
+                    while (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso() * 2, GetAmmoType()))
+                    {
+                        yield return new WaitForSeconds(GetFireRate());
+                        AmmunitionManager.instance.UseAmmo(GetAmmunitionConso() * 2, GetAmmoType());
+                        CreateBullet();
+                    }
+                }
+            }
         }
+        print("not enough ammo");
+        //Not enough ammo
     }
 
     //Same method as one present in WeaponsManager but when the bullet is created I directly create a second one but with the opposite direction

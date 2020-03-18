@@ -4,7 +4,7 @@ public class ProjectileBehaviour : MonoBehaviour
 {
     [Header("CONFIGURATION")]
 #pragma warning disable 0649
-    //Curve used to set flame speed
+    //Curve used to set flame speed, work has a ratio which modify speed
     [SerializeField] AnimationCurve flameSpeedCurve;
 #pragma warning restore 0649
     [Header("VARIABLES")]

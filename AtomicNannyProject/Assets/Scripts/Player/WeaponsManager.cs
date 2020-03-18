@@ -161,20 +161,32 @@ public class WeaponsManager : MonoBehaviour
             //Minigun has a specific case to simulate the charging time of minigun weapon
             //Dividing by 2 then 3 then 6 seems to be the same amount as GetTimeBeforeFirstShoot
             //There is no check for reloading because the fire is so small we don't take care of it
+            //For the ammo, we chech if there is enough for a shot, then we wait and finaly when we shot we consume the ammo
             case Weapons.minigun:
                 float time = WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon);
+                if (!AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
+                    break;
                 yield return new WaitForSeconds(time / 2);
+                AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                 CreateBullet(false);
+                if (!AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
+                    break;
                 yield return new WaitForSeconds(time / 3);
+                AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                 CreateBullet(false);
+                if (!AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
+                    break;
                 yield return new WaitForSeconds(time / 6);
+                AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                 CreateBullet(false);
                 //Then while there is enough amunition to shot again we shot again
-                while (true)
+                while (AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
                 {
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
+                    AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                     CreateBullet(false);
                 }
+                break;
             //The raygun works the same way of others weapons but it shots ray instead of bullet so it needs a specific case
             //If the weapon is realoding we cancel the coroutine but we pass a bool at true, so at the end of the reload if it's still true the coroutine will be recall
             //The boolean is pass to false when the player release the input
@@ -184,13 +196,18 @@ public class WeaponsManager : MonoBehaviour
                     startPrimaryShotNeeded = true;
                     yield break;
                 }
+                if (!AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
+                    break;
                 yield return new WaitForSeconds(WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
+                AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                 CreateRay();
-                while (true)
+                while (AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
                 {
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
+                    AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                     CreateRay();
                 }
+                break;
             //Same case as the raygun but creating bullet instead of ray
             default:
                 if (WeaponsStats.instance.IsReloading(currentWeapon))
@@ -198,14 +215,21 @@ public class WeaponsManager : MonoBehaviour
                     startPrimaryShotNeeded = true;
                     yield break;
                 }
+                if (!AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
+                    break;
                 yield return new WaitForSeconds(WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
+                AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                 CreateBullet(false);
-                while (true)
+                while (AmmunitionManager.instance.CheckAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon)))
                 {
                     yield return new WaitForSeconds(WeaponsStats.instance.GetFireRate(currentWeapon));
+                    AmmunitionManager.instance.UseAmmo(WeaponsStats.instance.GetAmmunitionConso(currentWeapon), WeaponsStats.instance.GetAmmoType(currentWeapon));
                     CreateBullet(false);
                 }
+                break;
         }
+        print("not enough ammo");
+        //Not enough ammo
     }
 
     //Here we test if the mod is a stanceMod, if it is the case and it isn't called by PrimaryShot input we simply change currentWeapon's stance

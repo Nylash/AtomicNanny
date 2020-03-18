@@ -57,24 +57,30 @@ public class RocketJump : WeaponMod
             WeaponsManager.instance.startSecondaryShotNeeded = true;
             yield break;
         }
-        WeaponsManager.instance.waitEndSpecificBehaviour = true;
-        StartCoroutine(ReloadSystem());
-        DoExplosion();
-        CalculateDirection();
-        float startY = PlayerMovementManager.instance.transform.position.y;
-        startJumping = true;
-        PlayerMovementManager.instance.recoil = jumpDirection * jumpLenght + new Vector3(0,jumpHeight,0);
-        currentJumpTime = 0;
-        yield return new WaitForSeconds(jumpDuration / 2);
-        startJumping = false;
-        endJumping = true;
-        currentJumpTime = 0;
-        yield return new WaitForSeconds(jumpDuration / 2);
-        endJumping = false;
-        PlayerMovementManager.instance.recoil = Vector3.zero;
-        PlayerMovementManager.instance.transform.position = new Vector3(PlayerMovementManager.instance.transform.position.x, startY, PlayerMovementManager.instance.transform.position.z);
-        PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
-        WeaponsManager.instance.waitEndSpecificBehaviour = false;
+        if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
+        {
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
+            WeaponsManager.instance.waitEndSpecificBehaviour = true;
+            StartCoroutine(ReloadSystem());
+            DoExplosion();
+            CalculateDirection();
+            float startY = PlayerMovementManager.instance.transform.position.y;
+            startJumping = true;
+            PlayerMovementManager.instance.recoil = jumpDirection * jumpLenght + new Vector3(0, jumpHeight, 0);
+            currentJumpTime = 0;
+            yield return new WaitForSeconds(jumpDuration / 2);
+            startJumping = false;
+            endJumping = true;
+            currentJumpTime = 0;
+            yield return new WaitForSeconds(jumpDuration / 2);
+            endJumping = false;
+            PlayerMovementManager.instance.recoil = Vector3.zero;
+            PlayerMovementManager.instance.transform.position = new Vector3(PlayerMovementManager.instance.transform.position.x, startY, PlayerMovementManager.instance.transform.position.z);
+            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            WeaponsManager.instance.waitEndSpecificBehaviour = false;
+        }
+        print("not enough ammo");
+        //Not enough ammo
     }
 
     //Simply do a OverlapSphere and apply damage to all enemies in the sphere

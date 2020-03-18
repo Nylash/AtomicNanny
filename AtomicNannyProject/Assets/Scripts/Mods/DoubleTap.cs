@@ -8,6 +8,7 @@ public class DoubleTap : WeaponMod
 
 
     //Simply add a second shot after the first to do the double tap effect
+    //I multiply by 2 GetAmmoConso because the DoubleTap shoot twice
     public override IEnumerator ModShot()
     {
         if (reloading)
@@ -15,16 +16,25 @@ public class DoubleTap : WeaponMod
             WeaponsManager.instance.startSecondaryShotNeeded = true;
             yield break;
         }
-        yield return new WaitForSeconds(GetTimeBeforeFirstShoot());
-        WeaponsManager.instance.CreateBullet(true);
-        yield return new WaitForSeconds(timeBetweenShots);
-        WeaponsManager.instance.CreateBullet(true);
-        while (true)
+        if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso() * 2, GetAmmoType()))
         {
-            yield return new WaitForSeconds(GetFireRate());
+            yield return new WaitForSeconds(GetTimeBeforeFirstShoot());
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
             WeaponsManager.instance.CreateBullet(true);
             yield return new WaitForSeconds(timeBetweenShots);
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
             WeaponsManager.instance.CreateBullet(true);
+            while (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso() * 2, GetAmmoType()))
+            {
+                yield return new WaitForSeconds(GetFireRate());
+                AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
+                WeaponsManager.instance.CreateBullet(true);
+                yield return new WaitForSeconds(timeBetweenShots);
+                AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
+                WeaponsManager.instance.CreateBullet(true);
+            }
         }
+        print("not enough ammo");
+        //Not enough ammo
     }
 }

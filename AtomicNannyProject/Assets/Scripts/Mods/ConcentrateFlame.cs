@@ -35,12 +35,19 @@ public class ConcentrateFlame : WeaponMod
             WeaponsManager.instance.startSecondaryShotNeeded = true;
             yield break;
         }
-        yield return new WaitForSeconds(GetTimeBeforeFirstShoot());
-        WeaponsManager.instance.CreateBullet(true);
-        while (true)
+        if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
         {
-            yield return new WaitForSeconds(GetFireRate());
+            yield return new WaitForSeconds(GetTimeBeforeFirstShoot());
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
             WeaponsManager.instance.CreateBullet(true);
+            while (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
+            {
+                yield return new WaitForSeconds(GetFireRate());
+                AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
+                WeaponsManager.instance.CreateBullet(true);
+            }
         }
+        print("not enough ammo");
+        //Not enough ammo
     }
 }

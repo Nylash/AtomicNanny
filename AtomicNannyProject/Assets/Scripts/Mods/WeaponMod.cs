@@ -43,9 +43,9 @@ public abstract class WeaponMod : MonoBehaviour
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).inaccuracyAngle;
     }
 
-    public virtual float GetAmmunitionsConso()
+    public virtual float GetAmmunitionConso()
     {
-        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).ammunitionsConso;
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).ammunitionConso;
     }
 
     public virtual float GetRecoilSpeed()
@@ -76,6 +76,11 @@ public abstract class WeaponMod : MonoBehaviour
     public float GetEnemyKnockback()
     {
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).enemyKnockback;
+    }
+
+    public AmmunitionManager.AmmoType GetAmmoType()
+    {
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).ammunition;
     }
 
     public virtual GameObject GetProjectile()

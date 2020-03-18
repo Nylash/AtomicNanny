@@ -50,4 +50,5 @@ MonoBehaviour:
   cooldown: 10
   damage: 20
   explosionRadius: 7.5
+  ammoCons: 10
   visualEffect: {fileID: 0}

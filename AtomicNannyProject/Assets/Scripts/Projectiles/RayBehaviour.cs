@@ -34,15 +34,24 @@ public class RayBehaviour : MonoBehaviour
     {
         Vector3 startPos = ray.GetPosition(0);
         Vector3 endPos = ray.GetPosition(1);
-        BoxCollider col = new GameObject("RayCollider").AddComponent<BoxCollider>();
+        BoxCollider col = gameObject.AddComponent<BoxCollider>();
         col.gameObject.tag = "Ray";
-        col.transform.parent = ray.transform;
         float rayLength = Vector3.Distance(startPos, endPos);
         col.size = new Vector3(rayLength, width, width);
         Vector3 midPoint = (startPos + endPos) / 2;
         col.transform.position = midPoint;
-        float angle = (Mathf.Abs(startPos.z - endPos.z) / Mathf.Abs(startPos.x - endPos.x));
+        col.center = Vector3.zero;
         col.transform.rotation = Quaternion.FromToRotation(Vector3.right, (endPos - startPos).normalized);
         col.isTrigger = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemyScriptRef = other.gameObject.GetComponent<Enemy>();
+            enemyScriptRef.TakeDamage(damage);
+            //knockback
+        }
     }
 }

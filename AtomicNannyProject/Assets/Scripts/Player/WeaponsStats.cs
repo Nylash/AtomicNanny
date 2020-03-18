@@ -58,9 +58,9 @@ public class WeaponsStats : MonoBehaviour
         return GetWeapon(weapon.ToString()).inaccuracyAngle;
     }
 
-    public float GetAmmunitionsConso(WeaponsManager.Weapons weapon)
+    public float GetAmmunitionConso(WeaponsManager.Weapons weapon)
     {
-        return GetWeapon(weapon.ToString()).ammunitionsConso;
+        return GetWeapon(weapon.ToString()).ammunitionConso;
     }
 
     public float GetRecoilSpeed(WeaponsManager.Weapons weapon)
@@ -91,6 +91,11 @@ public class WeaponsStats : MonoBehaviour
     public float GetEnemyKnockback(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).enemyKnockback;
+    }
+
+    public AmmunitionManager.AmmoType GetAmmoType(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).ammunition;
     }
 
     public GameObject GetProjectile(WeaponsManager.Weapons weapon)

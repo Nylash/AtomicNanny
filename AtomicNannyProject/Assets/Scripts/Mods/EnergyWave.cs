@@ -8,6 +8,7 @@ public class EnergyWave : WeaponMod
     public float cooldown;
     public float damage;
     public float explosionRadius;
+    public float ammoCons;
     public GameObject visualEffect;
 
     //temporary
@@ -24,9 +25,15 @@ public class EnergyWave : WeaponMod
     {
         return damage;
     }
+
+    public override float GetAmmunitionConso()
+    {
+        return ammoCons;
+    }
     #endregion
 
     //Call DoExplosion and display a Gizmos for 1 second (waiting for FX)
+    //The is no Wait before1stShot because we want it to be instantaneous
     public override IEnumerator ModShot()
     {
         if (reloading)
@@ -34,19 +41,26 @@ public class EnergyWave : WeaponMod
             WeaponsManager.instance.startSecondaryShotNeeded = true;
             yield break;
         }
-        display = true;
-        StartCoroutine(ReloadSystem());
-        DoExplosion();
-        yield return new WaitForSeconds(1);
-        display = false;
-        while (true)
+        if (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
         {
-            yield return new WaitForSeconds(GetFireRate());
+            AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
             display = true;
+            StartCoroutine(ReloadSystem());
             DoExplosion();
             yield return new WaitForSeconds(1);
             display = false;
+            while (AmmunitionManager.instance.CheckAmmo(GetAmmunitionConso(), GetAmmoType()))
+            {
+                yield return new WaitForSeconds(GetFireRate());
+                AmmunitionManager.instance.UseAmmo(GetAmmunitionConso(), GetAmmoType());
+                display = true;
+                DoExplosion();
+                yield return new WaitForSeconds(1);
+                display = false;
+            }
         }
+        print("not enough ammo");
+        //Not enough ammo
     }
 
     //Simply do a OverlapSphere and apply damage to all enemies in the sphere

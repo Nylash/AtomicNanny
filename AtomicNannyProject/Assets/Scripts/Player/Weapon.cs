@@ -13,13 +13,14 @@ public class Weapon
     public float splashDamageRadius;
     [Range(0,45)]
     public float inaccuracyAngle;
-    public float ammunitionsConso;
+    public float ammunitionConso;
     public float recoilSpeed;
     public int projectileByShoot;
     public float range;
     public float projectileSpeed;
     public float projectileSize;
     public float enemyKnockback;
+    public AmmunitionManager.AmmoType ammunition;
     public GameObject projectile;
     public GameObject objectMod;
     [Header("RUNNING VARIABLES")]
