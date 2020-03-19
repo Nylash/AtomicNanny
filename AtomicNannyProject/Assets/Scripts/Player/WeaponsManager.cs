@@ -294,6 +294,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.splashDamage = currentMod.GetSplashDamage();
                 bulletScriptRef.splashDamageRadius = currentMod.GetSplashDamageRadius();
                 bulletScriptRef.enemyKnockback = currentMod.GetEnemyKnockback();
+                bulletScriptRef.ammoType = currentMod.GetAmmoType();
                 bulletRef.SetActive(true);
             }
         }
@@ -327,6 +328,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.splashDamage = WeaponsStats.instance.GetSplashDamage(currentWeapon);
                 bulletScriptRef.splashDamageRadius = WeaponsStats.instance.GetSplashDamageRadius(currentWeapon);
                 bulletScriptRef.enemyKnockback = WeaponsStats.instance.GetEnemyKnockback(currentWeapon);
+                bulletScriptRef.ammoType = WeaponsStats.instance.GetAmmoType(currentWeapon);
                 bulletRef.SetActive(true);
             }
         }

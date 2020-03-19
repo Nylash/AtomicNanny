@@ -50,7 +50,7 @@ public class RayBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyScriptRef = other.gameObject.GetComponent<Enemy>();
-            enemyScriptRef.TakeDamage(damage);
+            enemyScriptRef.TakeDamage(damage, AmmunitionManager.AmmoType.atomic);
             //knockback
         }
     }

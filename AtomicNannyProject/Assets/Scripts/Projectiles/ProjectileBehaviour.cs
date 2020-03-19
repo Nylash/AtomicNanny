@@ -16,6 +16,7 @@ public class ProjectileBehaviour : MonoBehaviour
     public float splashDamage;
     public float splashDamageRadius;
     public float enemyKnockback;
+    public AmmunitionManager.AmmoType ammoType;
     
     Rigidbody rb;
     Vector3 birthPlace;
@@ -63,7 +64,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyScriptRef = collision.gameObject.GetComponent<Enemy>();
-            enemyScriptRef.TakeDamage(damage);
+            enemyScriptRef.TakeDamage(damage, ammoType);
             if (splashDamage != 0)
             {
                 Collider[] colliders = Physics.OverlapSphere(transform.position, splashDamageRadius, WeaponsManager.instance.enemiesMask);
@@ -72,7 +73,7 @@ public class ProjectileBehaviour : MonoBehaviour
                     if (item.gameObject == collision.gameObject)
                         continue;
                     Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
-                    scriptRef.TakeDamage(splashDamage);
+                    scriptRef.TakeDamage(splashDamage, ammoType);
                     //knockback
                 }
             }

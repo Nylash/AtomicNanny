@@ -17,7 +17,7 @@ public class AtomicBallBehaviour : ProjectileBehaviour
             foreach (Collider item in colliders)
             {
                 Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
-                scriptRef.TakeDamage(splashDamage);
+                scriptRef.TakeDamage(splashDamage, ammoType);
                 //knockback
             }
         }

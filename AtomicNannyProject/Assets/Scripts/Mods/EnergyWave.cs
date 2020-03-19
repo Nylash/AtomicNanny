@@ -70,7 +70,7 @@ public class EnergyWave : WeaponMod
         foreach (Collider item in colliders)
         {
             Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
-            scriptRef.TakeDamage(damage);
+            scriptRef.TakeDamage(damage, WeaponsStats.instance.GetAmmoType(attachedWeapon));
             //knockback
         }
         //throw fx

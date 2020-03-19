@@ -76,6 +76,7 @@ public class SplitShot : WeaponMod
             bulletScriptRef.damage = GetDamage();
             bulletScriptRef.splashDamage = GetSplashDamage();
             bulletScriptRef.enemyKnockback = GetEnemyKnockback();
+            bulletScriptRef.ammoType = GetAmmoType();
             bulletRef.SetActive(true);
         }
     }
