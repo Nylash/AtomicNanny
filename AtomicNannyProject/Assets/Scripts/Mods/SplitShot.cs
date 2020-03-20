@@ -65,6 +65,8 @@ public class SplitShot : WeaponMod
             bulletScriptRef.damage = GetDamage();
             bulletScriptRef.splashDamage = GetSplashDamage();
             bulletScriptRef.enemyKnockback = GetEnemyKnockback();
+            bulletScriptRef.ammoType = GetAmmoType();
+            bulletScriptRef.ammoGain = GetAmmunitionGain();
             bulletRef.SetActive(true);
             //Opposite shot
             bulletRef = Instantiate(GetProjectile(), WeaponsManager.instance.aimGuide.position, WeaponsManager.instance.aimGuide.rotation);
@@ -77,6 +79,7 @@ public class SplitShot : WeaponMod
             bulletScriptRef.splashDamage = GetSplashDamage();
             bulletScriptRef.enemyKnockback = GetEnemyKnockback();
             bulletScriptRef.ammoType = GetAmmoType();
+            bulletScriptRef.ammoGain = GetAmmunitionGain();
             bulletRef.SetActive(true);
         }
     }

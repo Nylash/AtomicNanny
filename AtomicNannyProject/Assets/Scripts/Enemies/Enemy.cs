@@ -23,11 +23,11 @@ public class Enemy : MonoBehaviour
 
 
     //Apply damage to enemy & call update on hpBar
-    public void TakeDamage(float damage, AmmunitionManager.AmmoType ammoType)
+    public void TakeDamage(float damage, float ammoGain, AmmunitionManager.AmmoType ammoType)
     {
         currentHealth -= damage;
         hpBarScriptRef.UpdateFillValue(currentHealth);
-        AmmunitionManager.instance.RefillAmmo(damage, ammoType);
+        AmmunitionManager.instance.RefillAmmo(ammoGain, ammoType);
         if (currentHealth < 0)
         {
             Destroy(hpBarRef);

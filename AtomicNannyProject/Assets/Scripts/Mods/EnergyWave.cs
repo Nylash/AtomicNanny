@@ -9,6 +9,7 @@ public class EnergyWave : WeaponMod
     public float damage;
     public float explosionRadius;
     public float ammoCons;
+    public float ammoGainByHit;
     public GameObject visualEffect;
 
     //temporary
@@ -29,6 +30,11 @@ public class EnergyWave : WeaponMod
     public override float GetAmmunitionConso()
     {
         return ammoCons;
+    }
+
+    public override float GetAmmunitionGain()
+    {
+        return ammoGainByHit;
     }
     #endregion
 
@@ -70,7 +76,7 @@ public class EnergyWave : WeaponMod
         foreach (Collider item in colliders)
         {
             Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
-            scriptRef.TakeDamage(damage, WeaponsStats.instance.GetAmmoType(attachedWeapon));
+            scriptRef.TakeDamage(damage, GetAmmunitionGain(), WeaponsStats.instance.GetAmmoType(attachedWeapon));
             //knockback
         }
         //throw fx

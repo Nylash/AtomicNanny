@@ -8,6 +8,8 @@ public class RocketJump : WeaponMod
     public float timeBeforeJump;
     public float damage;
     public float explosionRadius;
+    public float ammoCons;
+    public float ammoGain;
     public float jumpLenght;
     public float jumpHeight;
     public float jumpDuration;
@@ -28,6 +30,21 @@ public class RocketJump : WeaponMod
     public override float GetTimeBeforeFirstShoot()
     {
         return timeBeforeJump;
+    }
+
+    public override float GetDamage()
+    {
+        return damage;
+    }
+
+    public override float GetAmmunitionConso()
+    {
+        return ammoCons;
+    }
+
+    public override float GetAmmunitionGain()
+    {
+        return ammoGain;
     }
     #endregion
 
@@ -90,7 +107,7 @@ public class RocketJump : WeaponMod
         foreach (Collider item in colliders)
         {
             Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
-            scriptRef.TakeDamage(damage, WeaponsStats.instance.GetAmmoType(attachedWeapon));
+            scriptRef.TakeDamage(GetDamage(), GetAmmunitionGain(), WeaponsStats.instance.GetAmmoType(attachedWeapon));
             //knockback
         }
         //throw fx

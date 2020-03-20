@@ -48,8 +48,11 @@ MonoBehaviour:
   isStanceMod: 0
   reloading: 0
   cooldown: 20
+  timeBeforeJump: 0
   damage: 20
   explosionRadius: 7
+  ammoCons: 25
+  ammoGain: 4
   jumpLenght: 10
   jumpHeight: 8
   jumpDuration: 1

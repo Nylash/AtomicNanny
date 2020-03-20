@@ -51,4 +51,5 @@ MonoBehaviour:
   damage: 20
   explosionRadius: 7.5
   ammoCons: 10
+  ammoGainByHit: 5
   visualEffect: {fileID: 0}

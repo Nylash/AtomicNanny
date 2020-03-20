@@ -60,7 +60,12 @@ public class WeaponsStats : MonoBehaviour
 
     public float GetAmmunitionConso(WeaponsManager.Weapons weapon)
     {
-        return GetWeapon(weapon.ToString()).ammunitionConso;
+        return GetWeapon(weapon.ToString()).ammunitionConsoByShot;
+    }
+
+    public float GetAmmunitionGain(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).ammunitionGainByHit;
     }
 
     public float GetRecoilSpeed(WeaponsManager.Weapons weapon)

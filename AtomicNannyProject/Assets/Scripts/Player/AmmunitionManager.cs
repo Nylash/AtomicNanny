@@ -11,8 +11,6 @@ public class AmmunitionManager : MonoBehaviour
     [SerializeField] float maxClassicAmmo;
     [SerializeField] float maxAtomicAmmo;
     [SerializeField] float maxExplosiveAmmo;
-    [Range(0,1)]
-    [SerializeField] float ratioAmmoRecuperation;
 #pragma warning restore 0649
     #endregion
 
@@ -85,26 +83,26 @@ public class AmmunitionManager : MonoBehaviour
         UpdateBarsValues();
     }
 
-    public void RefillAmmo(float damageDone, AmmoType ammoType)
+    public void RefillAmmo(float ammoGain, AmmoType ammoType)
     {
         switch (ammoType)
         {
             case AmmoType.none:
-                currentClassicAmmo += damageDone * ratioAmmoRecuperation;
-                currentAtomicAmmo += damageDone * ratioAmmoRecuperation;
-                currentExplosiveAmmo += damageDone * ratioAmmoRecuperation;
+                currentClassicAmmo += ammoGain;
+                currentAtomicAmmo += ammoGain;
+                currentExplosiveAmmo += ammoGain;
                 break;
             case AmmoType.classic:
-                currentAtomicAmmo += damageDone * ratioAmmoRecuperation;
-                currentExplosiveAmmo += damageDone * ratioAmmoRecuperation;
+                currentAtomicAmmo += ammoGain;
+                currentExplosiveAmmo += ammoGain;
                 break;
             case AmmoType.atomic:
-                currentClassicAmmo += damageDone * ratioAmmoRecuperation;
-                currentExplosiveAmmo += damageDone * ratioAmmoRecuperation;
+                currentClassicAmmo += ammoGain;
+                currentExplosiveAmmo += ammoGain;
                 break;
             case AmmoType.explosive:
-                currentClassicAmmo += damageDone * ratioAmmoRecuperation;
-                currentAtomicAmmo += damageDone * ratioAmmoRecuperation;
+                currentClassicAmmo += ammoGain;
+                currentAtomicAmmo += ammoGain;
                 break;
         }
         if (currentClassicAmmo > maxClassicAmmo)

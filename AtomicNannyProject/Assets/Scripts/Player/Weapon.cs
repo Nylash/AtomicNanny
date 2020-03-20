@@ -13,7 +13,8 @@ public class Weapon
     public float splashDamageRadius;
     [Range(0,45)]
     public float inaccuracyAngle;
-    public float ammunitionConso;
+    public float ammunitionConsoByShot;
+    public float ammunitionGainByHit;
     public float recoilSpeed;
     public int projectileByShoot;
     public float range;

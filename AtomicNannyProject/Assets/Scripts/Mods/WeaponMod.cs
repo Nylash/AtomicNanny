@@ -45,7 +45,12 @@ public abstract class WeaponMod : MonoBehaviour
 
     public virtual float GetAmmunitionConso()
     {
-        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).ammunitionConso;
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).ammunitionConsoByShot;
+    }
+
+    public virtual float GetAmmunitionGain()
+    {
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).ammunitionGainByHit;
     }
 
     public virtual float GetRecoilSpeed()

@@ -6,6 +6,7 @@ public class RayBehaviour : MonoBehaviour
     public Vector3 endPosition;
     public float width;
     public float damage;
+    public float ammoGain;
 
     LineRenderer ray;
     float timer;
@@ -50,7 +51,7 @@ public class RayBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyScriptRef = other.gameObject.GetComponent<Enemy>();
-            enemyScriptRef.TakeDamage(damage, AmmunitionManager.AmmoType.atomic);
+            enemyScriptRef.TakeDamage(damage, ammoGain, AmmunitionManager.AmmoType.atomic);
             //knockback
         }
     }

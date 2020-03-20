@@ -713,7 +713,8 @@ MonoBehaviour:
     splashDamage: 0
     splashDamageRadius: 0
     inaccuracyAngle: 2
-    ammunitionConso: 0
+    ammunitionConsoByShot: 0
+    ammunitionGainByHit: 1
     recoilSpeed: 1
     projectileByShoot: 1
     range: 20
@@ -735,7 +736,8 @@ MonoBehaviour:
     splashDamage: 0
     splashDamageRadius: 0
     inaccuracyAngle: 15
-    ammunitionConso: 4
+    ammunitionConsoByShot: 4
+    ammunitionGainByHit: 0.5
     recoilSpeed: 5
     projectileByShoot: 4
     range: 10
@@ -758,7 +760,8 @@ MonoBehaviour:
     splashDamage: 0
     splashDamageRadius: 0
     inaccuracyAngle: 6
-    ammunitionConso: 1
+    ammunitionConsoByShot: 0.5
+    ammunitionGainByHit: 0.25
     recoilSpeed: 2.5
     projectileByShoot: 1
     range: 20
@@ -781,7 +784,8 @@ MonoBehaviour:
     splashDamage: 0
     splashDamageRadius: 0
     inaccuracyAngle: 0
-    ammunitionConso: 10
+    ammunitionConsoByShot: 10
+    ammunitionGainByHit: 5
     recoilSpeed: 0
     projectileByShoot: 1
     range: 20
@@ -804,7 +808,8 @@ MonoBehaviour:
     splashDamage: 5
     splashDamageRadius: 2
     inaccuracyAngle: 4
-    ammunitionConso: 3
+    ammunitionConsoByShot: 5
+    ammunitionGainByHit: 2
     recoilSpeed: 0
     projectileByShoot: 1
     range: 20
@@ -827,7 +832,8 @@ MonoBehaviour:
     splashDamage: 20
     splashDamageRadius: 5
     inaccuracyAngle: 5
-    ammunitionConso: 20
+    ammunitionConsoByShot: 15
+    ammunitionGainByHit: 3.5
     recoilSpeed: 3
     projectileByShoot: 1
     range: 20
@@ -846,11 +852,12 @@ MonoBehaviour:
     weapon: 6
     timeBeforeFirstShoot: 0
     fireRate: 0.01
-    damage: 1
+    damage: 0.2
     splashDamage: 0
     splashDamageRadius: 0
     inaccuracyAngle: 30
-    ammunitionConso: 1
+    ammunitionConsoByShot: 0.25
+    ammunitionGainByHit: 0.05
     recoilSpeed: 0
     projectileByShoot: 5
     range: 3
@@ -880,7 +887,6 @@ MonoBehaviour:
   maxClassicAmmo: 100
   maxAtomicAmmo: 100
   maxExplosiveAmmo: 100
-  ratioAmmoRecuperation: 0.25
   currentClassicAmmo: 0
   currentAtomicAmmo: 0
   currentExplosiveAmmo: 0

@@ -295,6 +295,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.splashDamageRadius = currentMod.GetSplashDamageRadius();
                 bulletScriptRef.enemyKnockback = currentMod.GetEnemyKnockback();
                 bulletScriptRef.ammoType = currentMod.GetAmmoType();
+                bulletScriptRef.ammoGain = currentMod.GetAmmunitionGain();
                 bulletRef.SetActive(true);
             }
         }
@@ -329,6 +330,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.splashDamageRadius = WeaponsStats.instance.GetSplashDamageRadius(currentWeapon);
                 bulletScriptRef.enemyKnockback = WeaponsStats.instance.GetEnemyKnockback(currentWeapon);
                 bulletScriptRef.ammoType = WeaponsStats.instance.GetAmmoType(currentWeapon);
+                bulletScriptRef.ammoGain = WeaponsStats.instance.GetAmmunitionGain(currentWeapon);
                 bulletRef.SetActive(true);
             }
         }
@@ -370,6 +372,8 @@ public class WeaponsManager : MonoBehaviour
             }
         }
         rayScriptRef.width = WeaponsStats.instance.GetProjectileSize(currentWeapon);
+        rayScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
+        rayScriptRef.ammoGain = WeaponsStats.instance.GetAmmunitionGain(currentWeapon);
         rayRef.SetActive(true);
     }
 
@@ -379,7 +383,6 @@ public class WeaponsManager : MonoBehaviour
         rayRef = Instantiate(WeaponsStats.instance.GetProjectile(currentWeapon), aimGuide.position, aimGuide.rotation);
         rayScriptRef = rayRef.GetComponent<RayBehaviour>();
         rayScriptRef.endPosition = endPos;
-        rayScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
     }
 
     //This coroutine handle Recoil, it is simply a movement in the opposite direction of shoot

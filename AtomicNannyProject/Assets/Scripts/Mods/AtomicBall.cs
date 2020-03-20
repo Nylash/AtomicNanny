@@ -10,6 +10,7 @@ public class AtomicBall : WeaponMod
     public float splashDamage;
     public float splashDamageRadius;
     public float ammoCons;
+    public float ammoGainByHit;
     public float projectileSpeed;
     public float projectileSize;
     public GameObject projectile;
@@ -44,6 +45,11 @@ public class AtomicBall : WeaponMod
     public override float GetAmmunitionConso()
     {
         return ammoCons;
+    }
+
+    public override float GetAmmunitionGain()
+    {
+        return ammoGainByHit;
     }
 
     public override float GetProjectileSpeed()
