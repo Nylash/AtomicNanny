@@ -83,6 +83,7 @@ public class AmmunitionManager : MonoBehaviour
         UpdateBarsValues();
     }
 
+    //Refill the ammo depending on the ammoType parameter
     public void RefillAmmo(float ammoGain, AmmoType ammoType)
     {
         switch (ammoType)

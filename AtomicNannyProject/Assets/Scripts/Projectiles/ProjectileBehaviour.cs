@@ -65,7 +65,10 @@ public class ProjectileBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyScriptRef = collision.gameObject.GetComponent<Enemy>();
-            enemyScriptRef.TakeDamage(damage, ammoGain, ammoType);
+            if(isFlame)
+                enemyScriptRef.TakeDamage(damage, ammoGain, ammoType, true);
+            else
+                enemyScriptRef.TakeDamage(damage, ammoGain, ammoType);
             if (splashDamage != 0)
             {
                 Collider[] colliders = Physics.OverlapSphere(transform.position, splashDamageRadius, WeaponsManager.instance.enemiesMask);

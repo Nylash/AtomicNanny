@@ -16,6 +16,10 @@ public class WeaponsStats : MonoBehaviour
     [SerializeField] Weapon rocket;
     [SerializeField] Weapon flameThrower;
 #pragma warning restore 0649
+    [Header("DOT CONFIGURATION")]
+    public float numberOfTicks;
+    public float intervalBtwTicks;
+    public float firstTickReducingRatio;
     #endregion
 
     private void Awake()
