@@ -10,6 +10,7 @@ public abstract class WeaponMod : MonoBehaviour
     public bool isStanceMod;
     [Header("RUNNING VARIABLES")]
     public bool reloading;
+    public float reloadTimeElapsed;
 
     //Define GET_METHODS for mod statistics
     #region GET_METHODS
@@ -98,19 +99,32 @@ public abstract class WeaponMod : MonoBehaviour
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).projectile;
     }
 
+    public float GetReloadElapsedTime()
+    {
+        return reloadTimeElapsed;
+    } 
+
     public virtual bool IsReloading()
     {
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).reloading;
     }
     #endregion
 
+    protected virtual void Update()
+    {
+        if (reloading)
+            reloadTimeElapsed += Time.deltaTime;
+    }
+
     //Same reload system than for the primary shot, but if the mod is a StanceMod we call SecondaryShot as an PrimaryCall, because it's when the player will do the input for primary call that we call the SecondaryShot
     //This behaviour simply remplace the call from PrimaryInput by SecondaryShot when the weapon is stanced
     public virtual IEnumerator ReloadSystem()
     {
         reloading = true;
+        reloadTimeElapsed = 0;
         yield return new WaitForSeconds(Mathf.Abs(GetFireRate() - GetTimeBeforeFirstShoot()));
         reloading = false;
+        reloadTimeElapsed = 0;
         switch (isStanceMod)
         {
             case true :

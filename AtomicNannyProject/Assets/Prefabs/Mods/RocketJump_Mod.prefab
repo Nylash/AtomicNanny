@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c94eab83791f6d40a61ccd5158b173b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: RocketJump
+  name: Rocket Jump
   attachedWeapon: 5
   isStanceMod: 0
   reloading: 0

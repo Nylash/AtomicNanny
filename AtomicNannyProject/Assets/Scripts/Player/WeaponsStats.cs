@@ -126,6 +126,11 @@ public class WeaponsStats : MonoBehaviour
         StartCoroutine(GetWeapon(weapon.ToString()).ReloadSystem());
     }
 
+    public float GetReloadTimeElapsed(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).reloadTimeElapsed;
+    }
+
     public WeaponMod GetEquippedMod(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).equippedMod;
@@ -141,6 +146,24 @@ public class WeaponsStats : MonoBehaviour
         return GetWeapon(weapon.ToString()).isStanced;
     }
     #endregion
+
+    private void Update()
+    {
+        if (pistol.reloading)
+            pistol.reloadTimeElapsed += Time.deltaTime;
+        if (shotgun.reloading)
+            shotgun.reloadTimeElapsed += Time.deltaTime;
+        if (minigun.reloading)
+            minigun.reloadTimeElapsed += Time.deltaTime;
+        if (raygun.reloading)
+            raygun.reloadTimeElapsed += Time.deltaTime;
+        if (plasmaRifle.reloading)
+            plasmaRifle.reloadTimeElapsed += Time.deltaTime;
+        if (rocket.reloading)
+            rocket.reloadTimeElapsed += Time.deltaTime;
+        if (flameThrower.reloading)
+            flameThrower.reloadTimeElapsed += Time.deltaTime;
+    }
 
     //Method used to instantiate the currendWeapon's mod, if there is one, to get a reference to it
     public void InstantiateMod(WeaponsManager.Weapons weapon)

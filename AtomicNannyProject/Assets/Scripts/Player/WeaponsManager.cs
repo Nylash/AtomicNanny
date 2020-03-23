@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class WeaponsManager : MonoBehaviour
 {
@@ -32,6 +33,12 @@ public class WeaponsManager : MonoBehaviour
     public bool startSecondaryShotNeeded;
     public bool waitEndSpecificBehaviour;
     Vector2 mousePosition;
+    //UI
+    Text weaponUI;
+    Text modUI;
+    Image reloadWeaponUI;
+    Image reloadModUI;
+    Text stanceUI;
     #endregion
 
     private void OnEnable() => controlsMap.Gameplay.Enable();
@@ -57,15 +64,58 @@ public class WeaponsManager : MonoBehaviour
     }
 
     //Instantiate the current mod to be sure it exists
+    //Handling UI elements
     private void Start()
     {
         WeaponsStats.instance.InstantiateMod(currentWeapon);
+        weaponUI = GameObject.FindGameObjectWithTag("EquippedWeaponUI").GetComponent<Text>();
+        modUI = GameObject.FindGameObjectWithTag("EquippedModUI").GetComponent<Text>();
+        reloadWeaponUI = GameObject.FindGameObjectWithTag("ReloadWeaponUI").GetComponent<Image>();
+        reloadModUI = GameObject.FindGameObjectWithTag("ReloadModUI").GetComponent<Image>();
+        stanceUI = GameObject.FindGameObjectWithTag("StanceUI").GetComponent<Text>();
+
+        weaponUI.text = currentWeapon.ToString();
+        reloadWeaponUI.fillAmount = 0;
+        if (WeaponsStats.instance.GetEquippedMod(currentWeapon) != null)
+        {
+            modUI.text = WeaponsStats.instance.GetEquippedMod(currentWeapon).name;
+            if (WeaponsStats.instance.GetEquippedMod(currentWeapon).isStanceMod)
+            {
+                stanceUI.text = "Alternative stance off";
+                reloadModUI.fillAmount = 0;
+            } 
+            else
+            {
+                stanceUI.text = "";
+                reloadModUI.fillAmount = 0;
+            }
+
+        } 
+        else
+        {
+            modUI.text = "none";
+            stanceUI.text = "";
+            reloadModUI.fillAmount = 0;
+        }  
     }
 
     //Update aimGuide position on each frame depending on the input
     //cf com on usingGamepad variable
+    //Also handling reloadUI
     private void Update()
     {
+        reloadWeaponUI.fillAmount = WeaponsStats.instance.GetReloadTimeElapsed(currentWeapon) / (WeaponsStats.instance.GetFireRate(currentWeapon) - WeaponsStats.instance.GetTimeBeforeFirstShoot(currentWeapon));
+        if (WeaponsStats.instance.GetEquippedMod(currentWeapon) != null)
+        {
+            WeaponMod currentMod = WeaponsStats.instance.GetEquippedMod(currentWeapon);
+            if (currentMod.isStanceMod)
+            {
+                if(WeaponsStats.instance.IsStanced(currentWeapon))
+                    reloadWeaponUI.fillAmount = currentMod.GetReloadElapsedTime() / (currentMod.GetFireRate() - currentMod.GetTimeBeforeFirstShoot());
+            }
+            else
+                reloadModUI.fillAmount = currentMod.GetReloadElapsedTime() / (currentMod.GetFireRate() - currentMod.GetTimeBeforeFirstShoot());
+        }
         if (!WeaponsWheelManager.instance.wheelOpen)
         {
             if (usingGamepad)
@@ -241,6 +291,7 @@ public class WeaponsManager : MonoBehaviour
             if (WeaponsStats.instance.GetEquippedMod(currentWeapon).isStanceMod && !calledFromPrimary)
             {
                 WeaponsStats.instance.ChangeStance(currentWeapon);
+                stanceUI.text = (WeaponsStats.instance.IsStanced(currentWeapon) ? "Alternative stance on" : "Alternative stance off");
                 if (primaryShotCoroutine != null)
                     StopCoroutine(primaryShotCoroutine);
                 if (secondaryShotCoroutine != null)
@@ -404,6 +455,7 @@ public class WeaponsManager : MonoBehaviour
     }
 
     //Method used to change currentWeapon, we stop all coroutine set some bool to false and instance the mod to get a reference to it if needed
+    //And we update UI elements
     public void ChangeWeapon(Weapons newWeapon)
     {
         if(newWeapon != currentWeapon)
@@ -418,6 +470,30 @@ public class WeaponsManager : MonoBehaviour
             if (PlayerMovementManager.instance.currentMovementState == PlayerMovementManager.MovementState.firing)
                 PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
             WeaponsStats.instance.InstantiateMod(currentWeapon);
+
+            weaponUI.text = currentWeapon.ToString();
+            reloadWeaponUI.fillAmount = 0;
+            if (WeaponsStats.instance.GetEquippedMod(currentWeapon) != null)
+            {
+                modUI.text = WeaponsStats.instance.GetEquippedMod(currentWeapon).name;
+                if (WeaponsStats.instance.GetEquippedMod(currentWeapon).isStanceMod)
+                {
+                    stanceUI.text = (WeaponsStats.instance.IsStanced(currentWeapon) ? "Alternative stance on" : "Alternative stance off");
+                    reloadModUI.fillAmount = 0;
+                }
+                else
+                {
+                    stanceUI.text = "";
+                    reloadModUI.fillAmount = 0;
+                }
+
+            }
+            else
+            {
+                modUI.text = "none";
+                stanceUI.text = "";
+                reloadModUI.fillAmount = 0;
+            }
         }
     }
 

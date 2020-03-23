@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Ray
   - Enemy
+  - EquippedModUI
+  - ReloadWeaponUI
+  - ReloadModUI
+  - StanceUI
+  - EquippedWeaponUI
   layers:
   - Default
   - TransparentFX

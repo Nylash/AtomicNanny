@@ -49,8 +49,9 @@ public class RocketJump : WeaponMod
     #endregion
 
     //Lerp heigh of movement based on current jump time elapsed
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         if (startJumping)
         {
             PlayerMovementManager.instance.recoil.y = Mathf.Lerp(jumpHeight, 0, currentJumpTime / (jumpDuration / 2));
@@ -96,8 +97,11 @@ public class RocketJump : WeaponMod
             PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
             WeaponsManager.instance.waitEndSpecificBehaviour = false;
         }
-        print("not enough ammo");
-        //Not enough ammo
+        else
+        {
+            print("not enough ammo");
+            //Not enough ammo
+        }
     }
 
     //Simply do a OverlapSphere and apply damage to all enemies in the sphere

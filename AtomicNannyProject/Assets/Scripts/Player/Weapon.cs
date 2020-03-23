@@ -29,15 +29,18 @@ public class Weapon
     public WeaponMod equippedMod;
     public bool reloading;
     public bool isStanced;
+    public float reloadTimeElapsed;
 
 
     //Basic coroutine that handle reload of the weapon. If at the end of reload time startShotNeeded is true (an input was press and is hold during reloading) we start shooting
     //The system is the same for secondary shot, with the specificity of StanceMod which launch primaryShot instead of secondaryShot when startShotNeeded is true
     public IEnumerator ReloadSystem()
     {
+        reloadTimeElapsed = 0;
         reloading = true;
         yield return new WaitForSeconds(Mathf.Abs(WeaponsStats.instance.GetFireRate(weapon) - WeaponsStats.instance.GetTimeBeforeFirstShoot(weapon)));
         reloading = false;
+        reloadTimeElapsed = 0;
         if (WeaponsManager.instance.startPrimaryShotNeeded)
         {
             WeaponsManager.instance.startPrimaryShotNeeded = false;
