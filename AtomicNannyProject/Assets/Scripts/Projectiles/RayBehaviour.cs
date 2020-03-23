@@ -6,6 +6,10 @@ public class RayBehaviour : MonoBehaviour
     public Vector3 endPosition;
     public float width;
     public float damage;
+    public float splashDamage;
+    public float splashDamageRadius;
+    public float dotDamage;
+    public AmmunitionManager.AmmoType ammoType;
     public float ammoGain;
 
     LineRenderer ray;
@@ -51,8 +55,24 @@ public class RayBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Enemy enemyScriptRef = other.gameObject.GetComponent<Enemy>();
-            enemyScriptRef.TakeDamage(damage, ammoGain, AmmunitionManager.AmmoType.atomic);
+            enemyScriptRef.TakeDamage(damage, ammoGain, ammoType);
+            if (dotDamage != 0)
+                enemyScriptRef.ApplyDot(dotDamage, ammoGain, ammoType);
             //knockback
+            if (splashDamage != 0)
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, splashDamageRadius, WeaponsManager.instance.enemiesMask);
+                foreach (Collider item in colliders)
+                {
+                    if (item.gameObject == other.gameObject)
+                        continue;
+                    Enemy scriptRef = item.gameObject.GetComponent<Enemy>();
+                    scriptRef.TakeDamage(splashDamage, ammoGain, ammoType);
+                    if (dotDamage != 0)
+                        enemyScriptRef.ApplyDot(dotDamage, ammoGain, ammoType);
+                    //knockback
+                }
+            }
         }
     }
 }

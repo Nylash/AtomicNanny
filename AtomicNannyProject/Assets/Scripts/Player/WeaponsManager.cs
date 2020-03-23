@@ -296,6 +296,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.enemyKnockback = currentMod.GetEnemyKnockback();
                 bulletScriptRef.ammoType = currentMod.GetAmmoType();
                 bulletScriptRef.ammoGain = currentMod.GetAmmunitionGain();
+                bulletScriptRef.dotDamage = currentMod.GetDotDamage();
                 bulletRef.SetActive(true);
             }
         }
@@ -331,6 +332,7 @@ public class WeaponsManager : MonoBehaviour
                 bulletScriptRef.enemyKnockback = WeaponsStats.instance.GetEnemyKnockback(currentWeapon);
                 bulletScriptRef.ammoType = WeaponsStats.instance.GetAmmoType(currentWeapon);
                 bulletScriptRef.ammoGain = WeaponsStats.instance.GetAmmunitionGain(currentWeapon);
+                bulletScriptRef.dotDamage = WeaponsStats.instance.GetDotDamage(currentWeapon);
                 bulletRef.SetActive(true);
             }
         }
@@ -374,6 +376,10 @@ public class WeaponsManager : MonoBehaviour
         rayScriptRef.width = WeaponsStats.instance.GetProjectileSize(currentWeapon);
         rayScriptRef.damage = WeaponsStats.instance.GetDamage(currentWeapon);
         rayScriptRef.ammoGain = WeaponsStats.instance.GetAmmunitionGain(currentWeapon);
+        rayScriptRef.splashDamage = WeaponsStats.instance.GetSplashDamage(currentWeapon);
+        rayScriptRef.splashDamageRadius = WeaponsStats.instance.GetSplashDamageRadius(currentWeapon);
+        rayScriptRef.dotDamage = WeaponsStats.instance.GetDotDamage(currentWeapon);
+        rayScriptRef.ammoType = WeaponsStats.instance.GetAmmoType(currentWeapon);
         rayRef.SetActive(true);
     }
 

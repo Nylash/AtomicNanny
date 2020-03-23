@@ -19,7 +19,6 @@ public class WeaponsStats : MonoBehaviour
     [Header("DOT CONFIGURATION")]
     public float numberOfTicks;
     public float intervalBtwTicks;
-    public float firstTickReducingRatio;
     #endregion
 
     private void Awake()
@@ -55,6 +54,11 @@ public class WeaponsStats : MonoBehaviour
     public float GetSplashDamageRadius(WeaponsManager.Weapons weapon)
     {
         return GetWeapon(weapon.ToString()).splashDamageRadius;
+    }
+
+    public float GetDotDamage(WeaponsManager.Weapons weapon)
+    {
+        return GetWeapon(weapon.ToString()).dotDamage;
     }
 
     public float GetInaccuracyAngle(WeaponsManager.Weapons weapon)

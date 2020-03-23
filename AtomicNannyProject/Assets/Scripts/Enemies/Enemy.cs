@@ -26,20 +26,9 @@ public class Enemy : MonoBehaviour
 
     //Apply damage to enemy & call update on hpBar
     //If it's a dot it start a coroutine and stop the previous one (if there is one), it simply apply or reapply the dot
-    public void TakeDamage(float damage, float ammoGain, AmmunitionManager.AmmoType ammoType, bool isDot = false)
+    public void TakeDamage(float damage, float ammoGain, AmmunitionManager.AmmoType ammoType)
     {
-        if (isDot)
-        {
-            if (dotCoroutine == null)
-                dotCoroutine = StartCoroutine(DamageOverTime(damage, ammoGain, ammoType));
-            else
-            {
-                StopCoroutine(dotCoroutine);
-                dotCoroutine = StartCoroutine(DamageOverTime(damage, ammoGain, ammoType));
-            }
-        }  
-        else
-            currentHealth -= damage;
+        currentHealth -= damage;
         hpBarScriptRef.UpdateFillValue(currentHealth);
         AmmunitionManager.instance.RefillAmmo(ammoGain, ammoType);
         if (currentHealth < 0)
@@ -49,20 +38,23 @@ public class Enemy : MonoBehaviour
         }  
     }
 
+    //Method applying or reapplying a dot
+    public void ApplyDot(float dotDamage, float ammoGain, AmmunitionManager.AmmoType ammoType)
+    {
+        if (dotCoroutine == null)
+            dotCoroutine = StartCoroutine(DamageOverTime(dotDamage, ammoGain, ammoType));
+        else
+        {
+            StopCoroutine(dotCoroutine);
+            dotCoroutine = StartCoroutine(DamageOverTime(dotDamage, ammoGain, ammoType));
+        }
+    }
+
     //Coroutine handling dot
     IEnumerator DamageOverTime(float tickDamage, float ammoGain, AmmunitionManager.AmmoType ammoType)
     {
-        currentHealth -= tickDamage/WeaponsStats.instance.firstTickReducingRatio;
-        hpBarScriptRef.UpdateFillValue(currentHealth);
-        AmmunitionManager.instance.RefillAmmo(ammoGain, ammoType);
-        if (currentHealth < 0)
-        {
-            Destroy(hpBarRef);
-            Destroy(gameObject);
-        }
         for (int i = 0; i < WeaponsStats.instance.numberOfTicks; i++)
         {
-            yield return new WaitForSeconds(WeaponsStats.instance.intervalBtwTicks);
             currentHealth -= tickDamage;
             hpBarScriptRef.UpdateFillValue(currentHealth);
             AmmunitionManager.instance.RefillAmmo(ammoGain, ammoType);
@@ -72,6 +64,7 @@ public class Enemy : MonoBehaviour
                 Destroy(gameObject);
                 break;
             }
+            yield return new WaitForSeconds(WeaponsStats.instance.intervalBtwTicks);
         }
     }
 }

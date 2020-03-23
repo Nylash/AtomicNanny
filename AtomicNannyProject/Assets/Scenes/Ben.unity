@@ -852,7 +852,7 @@ MonoBehaviour:
     weapon: 6
     timeBeforeFirstShoot: 0
     fireRate: 0.01
-    damage: 0.1
+    damage: 1
     splashDamage: 0
     splashDamageRadius: 0
     inaccuracyAngle: 30
@@ -872,8 +872,9 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
-  numberOfTicks: 50
-  intervalBtwTicks: 0.2
+  numberOfTicks: 20
+  intervalBtwTicks: 0.25
+  firstTickReducingRatio: 15
 --- !u!114 &280023503
 MonoBehaviour:
   m_ObjectHideFlags: 0

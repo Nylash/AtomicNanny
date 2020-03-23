@@ -38,6 +38,11 @@ public abstract class WeaponMod : MonoBehaviour
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).splashDamageRadius;
     }
 
+    public virtual float GetDotDamage()
+    {
+        return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).dotDamage;
+    }
+
     public virtual float GetInaccuracyAngle()
     {
         return WeaponsStats.instance.GetWeapon(attachedWeapon.ToString()).inaccuracyAngle;
