@@ -1431,6 +1431,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1894159247, guid: 500eddd79fcf1f940b74507917b6cc6f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894159247, guid: 500eddd79fcf1f940b74507917b6cc6f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894159247, guid: 500eddd79fcf1f940b74507917b6cc6f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1733218782871957748, guid: 500eddd79fcf1f940b74507917b6cc6f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1610,6 +1622,11 @@ PrefabInstance:
       propertyPath: aimGuide
       value: 
       objectReference: {fileID: 888488068}
+    - target: {fileID: 5143461799552421254, guid: 06c7481fd1d898e4e84750636eb18514,
+        type: 3}
+      propertyPath: currentWeapon
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5143461799552421263, guid: 06c7481fd1d898e4e84750636eb18514,
         type: 3}
       propertyPath: m_Name

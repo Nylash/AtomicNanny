@@ -33,6 +33,7 @@ public class WeaponsManager : MonoBehaviour
     public bool startSecondaryShotNeeded;
     public bool waitEndSpecificBehaviour;
     Vector2 mousePosition;
+    public bool waitEndRecoil;
     //UI
     Text weaponUI;
     Text modUI;
@@ -171,9 +172,15 @@ public class WeaponsManager : MonoBehaviour
         {
             if (primaryShotCoroutine != null)
                 StopCoroutine(primaryShotCoroutine);
-            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            if (PlayerMovementManager.instance.recoil != Vector3.zero)
+                waitEndRecoil = true;
+            else
+            {
+                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+                PlayerMovementManager.instance.recoil = Vector3.zero;
+            }   
             startPrimaryShotNeeded = false;
-            PlayerMovementManager.instance.recoil = Vector3.zero;
+            
         }
     }
 
@@ -197,7 +204,13 @@ public class WeaponsManager : MonoBehaviour
         {
             if (secondaryShotCoroutine != null)
                 StopCoroutine(secondaryShotCoroutine);
-            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            if (PlayerMovementManager.instance.recoil != Vector3.zero)
+                waitEndRecoil = true;
+            else
+            {
+                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+                PlayerMovementManager.instance.recoil = Vector3.zero;
+            }
             startSecondaryShotNeeded = false;
             PlayerMovementManager.instance.recoil = Vector3.zero;
         }
@@ -452,6 +465,12 @@ public class WeaponsManager : MonoBehaviour
         PlayerMovementManager.instance.recoil = -shootDirection * WeaponsStats.instance.GetRecoilSpeed(currentWeapon) / 2;
         yield return new WaitForSeconds(.2f);
         PlayerMovementManager.instance.recoil = Vector3.zero;
+        yield return new WaitForSeconds(.5f);
+        if (waitEndRecoil)
+        {
+            PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            waitEndRecoil = false;
+        }
     }
 
     //Method used to change currentWeapon, we stop all coroutine set some bool to false and instance the mod to get a reference to it if needed
@@ -468,7 +487,12 @@ public class WeaponsManager : MonoBehaviour
             startSecondaryShotNeeded = false;
             currentWeapon = newWeapon;
             if (PlayerMovementManager.instance.currentMovementState == PlayerMovementManager.MovementState.firing)
-                PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            {
+                if (PlayerMovementManager.instance.recoil != Vector3.zero)
+                    waitEndRecoil = true;
+                else
+                    PlayerMovementManager.instance.currentMovementState = PlayerMovementManager.MovementState.moving;
+            }
             WeaponsStats.instance.InstantiateMod(currentWeapon);
 
             weaponUI.text = currentWeapon.ToString();
