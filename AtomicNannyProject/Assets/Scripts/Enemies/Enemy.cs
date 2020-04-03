@@ -1,28 +1,48 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
+    //Basic class for all ennemies, including boss & mob
+
     [Header("CONFIGURATION")]
     public float maxHealth;
+    public bool displayRangeDebug;
+    public float highRangeCap;
+    public float midRangeCap;
+    public float closeRangeCap;
     public GameObject hpBar;
+    public LayerMask obstacleLayer;
+
+    [Header("PATTERN CONFIGURATION")]
+    public float highRangeAttackProb;
+    public float midRangeAttackProb;
 
     [Header("VARIABLES")]
     public float currentHealth;
     public GameObject hpBarRef;
     public EnemyHPBar hpBarScriptRef;
+    public BehaviourState currentBehaviour;
+    public RangeState currentRange;
+    
+    protected Transform player;
+    protected float distanceFromPlayer;
+    protected NavMeshAgent navAgent;
 
     Coroutine dotCoroutine;
 
-    private void Start()
+    protected virtual void Start()
     {
-        currentHealth = maxHealth;
-        hpBarRef = Instantiate(hpBar);
-        hpBarScriptRef = hpBarRef.GetComponent<EnemyHPBar>();
-        hpBarScriptRef.target = transform;
-        hpBarScriptRef.maxHealth = maxHealth;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        navAgent = GetComponent<NavMeshAgent>();
+        navAgent.updateRotation = false;
     }
 
+    protected virtual void Update()
+    {
+        distanceFromPlayer = Vector3.Distance(transform.position, player.position);
+    }
 
     //Apply damage to enemy & call update on hpBar
     //If it's a dot it start a coroutine and stop the previous one (if there is one), it simply apply or reapply the dot
@@ -66,5 +86,15 @@ public class Enemy : MonoBehaviour
             }
             yield return new WaitForSeconds(WeaponsStats.instance.intervalBtwTicks);
         }
+    }
+
+    public enum BehaviourState
+    {
+        moving, attacking
+    }
+
+    public enum RangeState
+    {
+        outRange, highRange, midRange, closeRange
     }
 }

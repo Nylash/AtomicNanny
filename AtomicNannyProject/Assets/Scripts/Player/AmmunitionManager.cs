@@ -116,6 +116,7 @@ public class AmmunitionManager : MonoBehaviour
 
     }
 
+    //Simply update the UI
     void UpdateBarsValues()
     {
         classicAmmoBar.fillAmount = currentClassicAmmo / maxClassicAmmo;

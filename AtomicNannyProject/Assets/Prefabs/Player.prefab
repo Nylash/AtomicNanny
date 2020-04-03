@@ -269,12 +269,13 @@ MonoBehaviour:
   rayMask:
     serializedVersion: 2
     m_Bits: 3072
-  currentWeapon: 3
+  currentWeapon: 5
   aimDirectionMouse: {x: 0, y: 0, z: 0}
   aimDirection: {x: 0, y: 0}
   startPrimaryShotNeeded: 0
   startSecondaryShotNeeded: 0
   waitEndSpecificBehaviour: 0
+  waitEndRecoil: 0
 --- !u!114 &5143461799552421253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,6 +312,7 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   shotgun:
     weapon: 1
     timeBeforeFirstShoot: 0
@@ -336,6 +338,7 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   minigun:
     weapon: 2
     timeBeforeFirstShoot: 2
@@ -361,6 +364,7 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   raygun:
     weapon: 3
     timeBeforeFirstShoot: 0.5
@@ -386,6 +390,7 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   plasmaRifle:
     weapon: 4
     timeBeforeFirstShoot: 0
@@ -411,6 +416,7 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   rocket:
     weapon: 5
     timeBeforeFirstShoot: 0
@@ -436,11 +442,12 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   flameThrower:
     weapon: 6
     timeBeforeFirstShoot: 0
     fireRate: 0.01
-    damage: 0.075
+    damage: 0.05
     splashDamage: 0
     splashDamageRadius: 0
     dotDamage: 1
@@ -461,6 +468,7 @@ MonoBehaviour:
     equippedMod: {fileID: 0}
     reloading: 0
     isStanced: 0
+    reloadTimeElapsed: 0
   numberOfTicks: 20
   intervalBtwTicks: 0.25
 --- !u!95 &5143461799552421248
