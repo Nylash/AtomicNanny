@@ -12,12 +12,16 @@ public abstract class Enemy : MonoBehaviour
     public float highRangeCap;
     public float midRangeCap;
     public float closeRangeCap;
+    public float kittingTimerCap;
     public GameObject hpBar;
     public LayerMask obstacleLayer;
 
-    [Header("PATTERN CONFIGURATION")]
+    [Header("PATTERNS CONFIGURATION")]
     public float highRangeAttackProb;
     public float midRangeAttackProb;
+    public PatternObject[] highRangePatterns;
+    public PatternObject[] midRangePatterns;
+    public PatternObject[] closeRangePatterns;
 
     [Header("VARIABLES")]
     public float currentHealth;
@@ -29,7 +33,9 @@ public abstract class Enemy : MonoBehaviour
     protected Transform player;
     protected float distanceFromPlayer;
     protected NavMeshAgent navAgent;
-
+    protected Rigidbody rb; 
+    protected float movingTimer;
+    
     Coroutine dotCoroutine;
 
     protected virtual void Start()
@@ -37,6 +43,7 @@ public abstract class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.updateRotation = false;
+        rb = GetComponent<Rigidbody>();
     }
 
     protected virtual void Update()
@@ -88,6 +95,9 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    //Method called at the end of attack pattern, to choose new behaviour
+    public abstract void EndOfPattern();
+
     public enum BehaviourState
     {
         moving, attacking
@@ -96,5 +106,13 @@ public abstract class Enemy : MonoBehaviour
     public enum RangeState
     {
         outRange, highRange, midRange, closeRange
+    }
+
+    [System.Serializable]
+    public class PatternObject
+    {
+        public Pattern patternScript;
+        public float minProb;
+        public float maxProb;
     }
 }

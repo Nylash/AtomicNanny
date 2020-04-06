@@ -5,6 +5,8 @@ public class Mob : Enemy
 {
     public bool obstacleObstuction;
 
+    PatternObject actualPattern;
+
     protected override void Start()
     {
         base.Start();
@@ -21,7 +23,18 @@ public class Mob : Enemy
         switch (currentBehaviour)
         {
             //If the mob is moving, everytime he pass a threshold we call DetermineBehaviour()
+            //Or when movingTimerCap is reached
             case BehaviourState.moving:
+                if(kittingTimerCap != 0)
+                {
+                    movingTimer += Time.deltaTime;
+                    if (movingTimer > kittingTimerCap)
+                    {
+                        movingTimer = 0;
+                        UpdateRange();
+                        DetermineBehaviour();
+                    }
+                }
                 navAgent.isStopped = false;
                 switch (currentRange)
                 {
@@ -72,30 +85,14 @@ public class Mob : Enemy
                     }
                 }
                 break;
-                //Here launch an attack, then when it ends we UpdateRange and DetermineBehaviour
+                //First frame launch the attack, then the pattern handle the rest (reset do by EndOfPattern, called at the end of the pattern)
             case BehaviourState.attacking:
                 navAgent.isStopped = true;
-                switch (currentRange)
+                if (actualPattern == null)
                 {
-                    case RangeState.outRange:
-                        UpdateRange();
-                        DetermineBehaviour();
-                        break;
-                    case RangeState.highRange:
-                        print("highRange attack");
-                        UpdateRange();
-                        DetermineBehaviour();
-                        break;
-                    case RangeState.midRange:
-                        print("midRange attack");
-                        UpdateRange();
-                        DetermineBehaviour();
-                        break;
-                    case RangeState.closeRange:
-                        print("closeRange attack");
-                        UpdateRange();
-                        DetermineBehaviour();
-                        break;
+                    DetermineAttack();
+                    actualPattern.patternScript.originScript = this;
+                    StartCoroutine(actualPattern.patternScript.StartPatternExecution());
                 }
                 break;
         }
@@ -109,14 +106,14 @@ public class Mob : Enemy
     void DetermineBehaviour()
     {
         obstacleObstuction = false;
+        float rand = Random.Range(0, 100);
         switch (currentRange)
         {
             case RangeState.outRange:
                 currentBehaviour = BehaviourState.moving;
                 break;
             case RangeState.highRange:
-                float randHigh = Random.Range(0, 100);
-                if (randHigh < highRangeAttackProb)
+                if (rand < highRangeAttackProb)
                 {
                     if (Physics.Linecast(transform.position, player.position, obstacleLayer))
                     {
@@ -124,14 +121,16 @@ public class Mob : Enemy
                         currentBehaviour = BehaviourState.moving;
                     }
                     else
+                    {
                         currentBehaviour = BehaviourState.attacking;
+                        rb.velocity = Vector3.zero;
+                    }   
                 }  
                 else
                     currentBehaviour = BehaviourState.moving;
                 break;
             case RangeState.midRange:
-                float randMid = Random.Range(0, 100);
-                if (randMid < midRangeAttackProb)
+                if (rand < midRangeAttackProb)
                 {
                     if (Physics.Linecast(transform.position, player.position, obstacleLayer))
                     {
@@ -139,15 +138,66 @@ public class Mob : Enemy
                         currentBehaviour = BehaviourState.moving;
                     }
                     else
+                    {
                         currentBehaviour = BehaviourState.attacking;
+                        rb.velocity = Vector3.zero;
+                    }
                 }
                 else
                     currentBehaviour = BehaviourState.moving;
                 break;
             case RangeState.closeRange:
                 currentBehaviour = BehaviourState.attacking;
+                rb.velocity = Vector3.zero;
                 break;
         }
+    }
+
+    //Select a pattern depending on probabilities determine on EnemyGameObject
+    //To resume, we rand a number between 0 & 99
+    //Then we test patterns store in CurrentRangePatterns
+    //if the rand is >= to minProb and < to maxProb of this pattern, then it is the good one
+    void DetermineAttack()
+    {
+        int index = Random.Range(0, 100);
+        switch (currentRange)
+        {
+            case RangeState.outRange:
+                Debug.LogError("You can't be there.");
+                break;
+            case RangeState.highRange:
+                foreach (PatternObject pattern in highRangePatterns)
+                {
+                    if(index >= pattern.minProb && index < pattern.maxProb)
+                    {
+                        actualPattern = pattern;
+                        break;
+                    }
+                }
+                break;
+            case RangeState.midRange:
+                foreach (PatternObject pattern in midRangePatterns)
+                {
+                    if (index >= pattern.minProb && index < pattern.maxProb)
+                    {
+                        actualPattern = pattern;
+                        break;
+                    }
+                }
+                break;
+            case RangeState.closeRange:
+                foreach (PatternObject pattern in closeRangePatterns)
+                {
+                    if (index >= pattern.minProb && index < pattern.maxProb)
+                    {
+                        actualPattern = pattern;
+                        break;
+                    }
+                }
+                break;
+        }
+        if (actualPattern == null)
+            Debug.LogError("Verify all patterns probabilities, especially " + currentRange + " patterns.");
     }
 
     //Simply update currentRange variable, needed for example after an attack
@@ -169,6 +219,14 @@ public class Mob : Enemy
         }
         else
             currentRange = RangeState.outRange;
+    }
+
+    //Method called at the end of attack pattern, to choose new behaviour
+    public override void EndOfPattern()
+    {
+        actualPattern = null;
+        UpdateRange();
+        DetermineBehaviour();
     }
 
     //Used to display the range's threshold
