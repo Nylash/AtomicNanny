@@ -1457,6 +1457,7 @@ MonoBehaviour:
   midRangeCap: 5
   closeRangeCap: 2
   kittingTimerCap: 5
+  kittingIncreaseProbability: 1
   hpBar: {fileID: 8444704752399441454, guid: d17da2ac991a0704485313678cb3d3e6, type: 3}
   obstacleLayer:
     serializedVersion: 2
@@ -3989,7 +3990,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1356874005}
-  m_LocalRotation: {x: -0.33100694, y: -0.000000014215497, z: -6.578968e-11, w: -0.9436284}
+  m_LocalRotation: {x: -0.33100694, y: -0.000000014215504, z: -6.5762146e-11, w: -0.9436284}
   m_LocalPosition: {x: 19.99, y: 9, z: -25.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -6283,7 +6284,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966924882}
-  m_LocalRotation: {x: -0.33100694, y: -0.000000014215497, z: -6.578968e-11, w: -0.9436284}
+  m_LocalRotation: {x: -0.33100694, y: -0.000000014215504, z: -6.5762146e-11, w: -0.9436284}
   m_LocalPosition: {x: 19.99, y: 9, z: -25.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

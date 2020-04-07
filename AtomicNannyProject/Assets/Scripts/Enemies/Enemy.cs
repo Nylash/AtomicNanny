@@ -13,6 +13,7 @@ public abstract class Enemy : MonoBehaviour
     public float midRangeCap;
     public float closeRangeCap;
     public float kittingTimerCap;
+    public float kittingIncreaseProbability;
     public GameObject hpBar;
     public LayerMask obstacleLayer;
 
@@ -35,6 +36,7 @@ public abstract class Enemy : MonoBehaviour
     protected NavMeshAgent navAgent;
     protected Rigidbody rb; 
     protected float movingTimer;
+    protected float kittingIncreaseProbabilityVariable;
     
     Coroutine dotCoroutine;
 

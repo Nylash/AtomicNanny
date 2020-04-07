@@ -106,7 +106,7 @@ public class Mob : Enemy
     void DetermineBehaviour()
     {
         obstacleObstuction = false;
-        float rand = Random.Range(0, 100);
+        float rand = Random.Range(0, 100) + kittingIncreaseProbabilityVariable;
         switch (currentRange)
         {
             case RangeState.outRange:
@@ -149,6 +149,15 @@ public class Mob : Enemy
             case RangeState.closeRange:
                 currentBehaviour = BehaviourState.attacking;
                 rb.velocity = Vector3.zero;
+                break;
+        }
+        switch (currentBehaviour)
+        {
+            case BehaviourState.moving:
+                kittingIncreaseProbabilityVariable += kittingIncreaseProbability;
+                break;
+            case BehaviourState.attacking:
+                kittingIncreaseProbabilityVariable = 0;
                 break;
         }
     }
